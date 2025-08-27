@@ -4,6 +4,8 @@ import com.nowcoder.community.service.AlphaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +53,18 @@ public class AlphaController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // GET request
+    // /students?current=1&limit=20
+    @RequestMapping(path = "/students", method = RequestMethod.GET)
+    @ResponseBody
+    public String getStudents(
+            @RequestParam(name = "current", required = false, defaultValue = "1") int current,
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit) {
+        System.out.println(current);
+        System.out.println(limit);
+        return "some students";
     }
 
 }
