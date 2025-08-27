@@ -3,6 +3,7 @@ package com.nowcoder.community.controller;
 import com.nowcoder.community.service.AlphaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -90,6 +91,13 @@ public class AlphaController {
         mav.addObject("age", 30);
         mav.setViewName("/demo/view");
         return mav;
+    }
+
+    @RequestMapping(path = "/school", method = RequestMethod.GET)
+    public String getSchool(Model model) {
+        model.addAttribute("name", "Peking University");
+        model.addAttribute("age", 80);
+        return "/demo/view";
     }
 
 }
