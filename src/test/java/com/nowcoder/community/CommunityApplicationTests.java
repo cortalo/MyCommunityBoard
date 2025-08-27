@@ -5,6 +5,7 @@ import com.nowcoder.community.service.AlphaService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -51,5 +52,13 @@ public class CommunityApplicationTests implements ApplicationContextAware {
         SimpleDateFormat simpleDateFormat =
                 applicationContext.getBean(SimpleDateFormat.class);
         System.out.println(simpleDateFormat.format(new Date()));
+    }
+
+    @Autowired
+    private AlphaDao alphaDao;
+
+    @Test
+    public void testDI() {
+        System.out.println(alphaDao);
     }
 }
