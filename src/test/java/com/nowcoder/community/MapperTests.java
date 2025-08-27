@@ -2,6 +2,7 @@ package com.nowcoder.community;
 
 import com.nowcoder.community.dao.UserMapper;
 import com.nowcoder.community.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,17 @@ public class MapperTests {
         int rows = userMapper.insertUser(user);
         System.out.println(rows);
         System.out.println(user.getId());
+    }
+
+    @Test
+    public void testUpdateUser() {
+        int rows = userMapper.updateStatus(151, 1);
+        System.out.println(rows);
+
+        rows = userMapper.updateHeader(150, "http://www.nowcoder.com/103.png");
+        System.out.println(rows);
+
+        rows = userMapper.updatePassword(150, "world");
+        System.out.println(rows);
     }
 }
