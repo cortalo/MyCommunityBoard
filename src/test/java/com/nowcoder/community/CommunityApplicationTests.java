@@ -38,5 +38,8 @@ public class CommunityApplicationTests implements ApplicationContextAware {
     public void testBeanManagement() {
         AlphaService alphaService = applicationContext.getBean(AlphaService.class);
         System.out.println(alphaService);
+
+        alphaService = applicationContext.getBean(AlphaService.class);
+        System.out.println(alphaService);
     }
 }
