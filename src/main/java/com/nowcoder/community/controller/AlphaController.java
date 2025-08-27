@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/alpha")
@@ -98,6 +101,17 @@ public class AlphaController {
         model.addAttribute("name", "Peking University");
         model.addAttribute("age", 80);
         return "/demo/view";
+    }
+
+    // response JSON data
+    @RequestMapping(path = "/emp", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getEmp() {
+        Map<String, Object> emp = new HashMap<>();
+        emp.put("name", "Zhang Shan");
+        emp.put("age", 23);
+        emp.put("salary", 8000.00);
+        return emp;
     }
 
 }
