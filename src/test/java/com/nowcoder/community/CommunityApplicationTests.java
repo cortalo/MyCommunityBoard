@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -55,10 +56,19 @@ public class CommunityApplicationTests implements ApplicationContextAware {
     }
 
     @Autowired
+    @Qualifier("alphaHibernate")
     private AlphaDao alphaDao;
+
+    @Autowired
+    private AlphaService alphaService;
+
+    @Autowired
+    private SimpleDateFormat simpleDateFormat;
 
     @Test
     public void testDI() {
         System.out.println(alphaDao);
+        System.out.println(alphaService);
+        System.out.println(simpleDateFormat);
     }
 }
