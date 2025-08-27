@@ -11,6 +11,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = CommunityApplication.class)
@@ -41,5 +44,12 @@ public class CommunityApplicationTests implements ApplicationContextAware {
 
         alphaService = applicationContext.getBean(AlphaService.class);
         System.out.println(alphaService);
+    }
+
+    @Test
+    public void testBeanConfig() {
+        SimpleDateFormat simpleDateFormat =
+                applicationContext.getBean(SimpleDateFormat.class);
+        System.out.println(simpleDateFormat.format(new Date()));
     }
 }

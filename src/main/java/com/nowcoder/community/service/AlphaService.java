@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 @Service
-@Scope("prototype")
+//@Scope("prototype")
 public class AlphaService {
 
     public AlphaService() {
