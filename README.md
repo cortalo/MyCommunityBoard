@@ -1,1 +1,1 @@
-TODO 1.30 Homepage 1:02:00
+TODO 1.38 Debug Tips
