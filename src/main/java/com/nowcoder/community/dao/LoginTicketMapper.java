@@ -11,13 +11,13 @@ public interface LoginTicketMapper {
             "values(#{userId},#{ticket},#{status},#{expired}) "
     })
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    int insertLoginTicker(LoginTicket loginTicket);
+    int insertLoginTicket(LoginTicket loginTicket);
 
     @Select({
             "select id,user_id,ticket,status,expired ",
             "from login_ticket where ticket=#{ticket} "
     })
-    LoginTicket selectByTicker(String ticket);
+    LoginTicket selectByTicket(String ticket);
 
     @Update({
             "<script>",

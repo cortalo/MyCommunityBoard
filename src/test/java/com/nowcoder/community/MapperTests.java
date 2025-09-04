@@ -89,16 +89,16 @@ public class MapperTests {
         loginTicket.setStatus(0);
         loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000*60*10));
 
-        loginTicketMapper.insertLoginTicker(loginTicket);
+        loginTicketMapper.insertLoginTicket(loginTicket);
     }
 
     @Test
     public void testSelectLoginTicket() {
-        LoginTicket loginTicket = loginTicketMapper.selectByTicker("abc");
+        LoginTicket loginTicket = loginTicketMapper.selectByTicket("abc");
         System.out.println(loginTicket);
 
         loginTicketMapper.updateStatus("abc", 1);
-        loginTicket = loginTicketMapper.selectByTicker("abc");
+        loginTicket = loginTicketMapper.selectByTicket("abc");
         System.out.println(loginTicket);
     }
 }
