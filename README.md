@@ -1,3 +1,3 @@
 # My Community Forum
 
-TODO 2.7 Register 01:29:00
+TODO 2.17 Kaptcha
