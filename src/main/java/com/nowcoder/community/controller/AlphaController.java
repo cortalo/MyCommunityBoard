@@ -154,4 +154,11 @@ public class AlphaController {
         return "set cookie";
     }
 
+    @RequestMapping(path = "/cookie/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCookie(@CookieValue("code") String code) {
+        System.out.println(code);
+        return "get cookie";
+    }
+
 }
