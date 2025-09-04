@@ -1,3 +1,3 @@
 # My Community Forum
 
-TODO 2.17 Kaptcha
+TODO 2.23 login and logout
