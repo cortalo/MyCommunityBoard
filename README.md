@@ -1,3 +1,3 @@
 # My Community Forum
 
-TODO 2.33 account setting
+TODO 2.40 homework: change password
