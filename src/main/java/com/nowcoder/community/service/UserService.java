@@ -8,6 +8,8 @@ import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.MailClient;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,8 @@ public class UserService implements CommunityConstant {
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public User findUserById(int id) {
         return userMapper.selectById(id);
@@ -168,6 +172,39 @@ public class UserService implements CommunityConstant {
 
     public int updateHeader(int userId, String headerUrl) {
         return userMapper.updateHeader(userId, headerUrl);
+    }
+
+    public Map<String, Object> changePassword(int userId, String password, String newPassword) {
+        Map<String, Object> map = new HashMap<>();
+        // null value handling
+        if (StringUtils.isBlank(password)) {
+            map.put("passwordMsg", "Password cannot be empty.");
+            return map;
+        }
+        if (StringUtils.isBlank(newPassword)) {
+            map.put("newPasswordMsg", "Password cannot be empty.");
+            return map;
+        }
+
+        // check if user exists
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            logger.error("userId does not exist.");
+            throw new RuntimeException("userId does not exist.");
+        }
+
+        // check if old password is correct
+        password = CommunityUtil.md5(password + user.getSalt());
+        if (!user.getPassword().equals(password)) {
+            map.put("passwordMsg", "password is not correct.");
+            return map;
+        }
+
+        // change password
+        userMapper.updatePassword(userId, CommunityUtil.md5(newPassword + user.getSalt()));
+        map.put("successMsg", "change password success.");
+
+        return map;
     }
 
 }

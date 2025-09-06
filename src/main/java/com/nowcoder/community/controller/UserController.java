@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -107,6 +109,27 @@ public class UserController {
             logger.error("read image failure: " + e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
+    public String changePassword(@CookieValue("ticket") String ticket, String password, String newPassword, Model model) {
+        User user = hostHolder.getUser();
+        Map<String, Object> map = userService.changePassword(user.getId(), password, newPassword);
+        if (map.containsKey("passwordMsg")) {
+            model.addAttribute("passwordMsg", map.get("passwordMsg"));
+            return "/site/setting";
+        }
+        if (map.containsKey("newPasswordMsg")) {
+            model.addAttribute("newPasswordMsg", map.get("newPasswordMsg"));
+            return "/site/setting";
+        }
+        if (map.containsKey("successMsg")) {
+            userService.logout(ticket);
+            return "redirect:/login";
+        }
+
+        logger.error("change password failure");
+        throw new RuntimeException("change password failure");
     }
 
 }
