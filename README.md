@@ -1,3 +1,3 @@
 # My Community Forum
 
-TODO 2.40 homework: change password
+TODO 2.41 Check login status
