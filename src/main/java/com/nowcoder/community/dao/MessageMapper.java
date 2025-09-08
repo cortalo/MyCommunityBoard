@@ -23,4 +23,10 @@ public interface MessageMapper {
     // get number of unread letters in one conversation (or all conversations)
     int selectLetterUnreadCount(int userId, String conversationId);
 
+    // insert message
+    int insertMessage(Message message);
+
+    // update status of message (read, unread,...)
+    int updateStatus(List<Integer> ids, int status);
+
 }
