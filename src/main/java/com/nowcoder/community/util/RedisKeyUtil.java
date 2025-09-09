@@ -1,5 +1,7 @@
 package com.nowcoder.community.util;
 
+import com.mysql.cj.util.DnsSrv;
+
 public class RedisKeyUtil {
 
     private static final String SPLIT = ":";
@@ -8,6 +10,7 @@ public class RedisKeyUtil {
     private static final String PREFIX_FOLLOWEE = "followee";
     private static final String PREFIX_FOLLOWER = "follower";
     private static final String PREFIX_KAPTCHA = "kaptcha";
+    private static final String PREFIX_TICKET = "ticket";
 
     // some like entity
     // like:entity:entityType:entityId -> set(userId)
@@ -36,6 +39,11 @@ public class RedisKeyUtil {
     // login kaptcha
     public static String getKaptchaKey(String owner) {
         return PREFIX_KAPTCHA + SPLIT + owner;
+    }
+
+    // login ticket
+    public static String getTicketKey(String ticket) {
+        return PREFIX_TICKET + SPLIT + ticket;
     }
 
 
