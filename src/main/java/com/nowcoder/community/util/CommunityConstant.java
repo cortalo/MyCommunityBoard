@@ -1,5 +1,7 @@
 package com.nowcoder.community.util;
 
+import org.apache.kafka.common.protocol.types.Field;
+
 public interface CommunityConstant {
 
     /**
@@ -41,5 +43,26 @@ public interface CommunityConstant {
      * entity type: user
      */
     int ENTITY_TYPE_USER = 3;
+
+    /**
+     * Event Topic: comment
+     */
+    String TOPIC_COMMENT = "comment";
+
+    /**
+     * Event Topic: like
+     */
+    String TOPIC_LIKE = "like";
+
+    /**
+     * Event Topic: follow
+     */
+    String TOPIC_FOLLOW = "follow";
+
+    /**
+     * System User Id
+     */
+    int SYSTEM_USER_ID = 1;
+
 
 }
