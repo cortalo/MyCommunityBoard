@@ -89,7 +89,7 @@
                                 th:text="${#dates.format(commentNotice.message.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
 							</h6>
 							<div>
-								<a href="#">
+								<a th:href="@{/notice/detail/comment}">
                                     User
                                     <i th:utext="${commentNotice.user.username}">nowcoder</i> comments your
                                     <b th:text="${commentNotice.entityType==1?'post':'comment'}">post</b>
@@ -112,7 +112,7 @@
                                       th:text="${#dates.format(likeNotice.message.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
 							</h6>
 							<div>
-								<a href="notice-detail.html">user
+								<a th:href="@{/notice/detail/like}">user
                                     <i th:utext="${likeNotice.user.username}">nowcoder</i> likes your
                                     <b th:text="${likeNotice.entityType==1?'post':'comment'}">post</b> ...</a>
 								<ul class="d-inline font-size-12 float-right">
@@ -124,7 +124,7 @@
 					</li>
                     <!-- follow notice -->
 					<li class="media pb-3 pt-3 mb-3 border-bottom position-relative" th:if="${followNotice!=null}">
-						<span class="badge badge-danger">3</span>
+						<span class="badge badge-danger" th:text="${followNotice.unread!=0?followNotice.unread:''}">3</span>
 						<img src="http://static.nowcoder.com/images/head/follow.png" class="mr-4 user-header" alt="notice icon">
 						<div class="media-body">
 							<h6 class="mt-0 mb-3">
@@ -133,7 +133,7 @@
                                       th:text="${#dates.format(followNotice.message.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
 							</h6>
 							<div>
-								<a href="notice-detail.html">user
+								<a th:href="@{/notice/detail/follow}">user
                                     <i th:utext="${followNotice.user.username}">nowcoder</i> follows you ...</a>
 								<ul class="d-inline font-size-12 float-right">
 									<li class="d-inline ml-2"><span class="text-primary">in total
