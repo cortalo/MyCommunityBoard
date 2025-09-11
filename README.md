@@ -1,3 +1,3 @@
 # My Community Forum
 
-TODO 6.4 ElasticSearch in Spring
+TODO 6.6 ElasticSearch
