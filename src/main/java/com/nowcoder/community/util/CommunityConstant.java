@@ -60,6 +60,11 @@ public interface CommunityConstant {
     String TOPIC_FOLLOW = "follow";
 
     /**
+     * Event Topic: publish post
+     */
+    String TOPIC_PUBLISH = "publish";
+
+    /**
      * System User Id
      */
     int SYSTEM_USER_ID = 1;
