@@ -18,9 +18,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -107,5 +109,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/letter").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/admin").hasAnyAuthority("ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/denied");
+
+        http.addFilterBefore(new Filter() {
+            @Override
+            public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+                HttpServletRequest request = (HttpServletRequest) servletRequest;
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                if (request.getServletPath().equals("/login")) {
+                    String verifyCode = request.getParameter("verifyCode");
+                    if (verifyCode == null || !verifyCode.equalsIgnoreCase("1234")) {
+                        request.setAttribute("error", "verify code is not correct");
+                        request.getRequestDispatcher("/loginpage").forward(request, response);
+                        return;
+                    }
+                }
+                filterChain.doFilter(request, response);
+            }
+        }, UsernamePasswordAuthenticationFilter.class);
+
+        // remember me
+        http.rememberMe()
+                .tokenRepository(new InMemoryTokenRepositoryImpl())
+                .tokenValiditySeconds(3600 * 24)
+                .userDetailsService(userService);
     }
 }
