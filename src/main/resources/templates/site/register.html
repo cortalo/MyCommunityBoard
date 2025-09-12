@@ -19,12 +19,15 @@
     <div class="main">
         <div class="container pl-5 pr-5 pt-3 pb-3 mt-3 mb-3">
             <h3 class="text-center text-info border-bottom pb-3">Register</h3>
-            <form class="mt-5">
+            <form class="mt-5" method="post" th:action="@{/register}">
                 <div class="form-group row">
                     <label for="username" class="col-sm-2 col-form-label text-right">Username:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="username" placeholder="please enter a username" required>
-                        <div class="invalid-feedback">
+                        <input type="text"
+                               th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|"
+                               th:value="${user!=null?user.username:''}"
+                               id="username" name="username" placeholder="please enter a username" required>
+                        <div class="invalid-feedback" th:text="${usernameMsg}">
                             username exist.
                         </div>
                     </div>
@@ -32,8 +35,11 @@
                 <div class="form-group row mt-4">
                     <label for="password" class="col-sm-2 col-form-label text-right">Password:</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password" placeholder="please enter a password" required>
-                        <div class="invalid-feedback">
+                        <input type="password"
+                               th:class="|form-control ${passwordMsg!=null?'is-invalid':''}|"
+                               th:value="${user!=null?user.password:''}"
+                               id="password" name="password" placeholder="please enter a password" required>
+                        <div class="invalid-feedback" th:text="${passwordMsg}">
                             password is too short
                         </div>
                     </div>
@@ -41,7 +47,9 @@
                 <div class="form-group row mt-4">
                     <label for="confirm-password" class="col-sm-2 col-form-label text-right">Repeat Passwd:</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control" id="confirm-password" placeholder="please repeat your password" required>
+                        <input type="password" class="form-control"
+                               th:value="${user!=null?user.password:''}"
+                               id="confirm-password" placeholder="please repeat your password" required>
                         <div class="invalid-feedback">
                             password does not match
                         </div>
@@ -50,8 +58,11 @@
                 <div class="form-group row">
                     <label for="email" class="col-sm-2 col-form-label text-right">Email:</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" placeholder="please enter your email" required>
-                        <div class="invalid-feedback">
+                        <input type="email"
+                               th:class="|form-control ${emailMsg!=null?'is-invalid':''}|"
+                               th:value="${user!=null?user.email:''}"
+                               id="email" name="email" placeholder="please enter your email" required>
+                        <div class="invalid-feedback" th:text="${emailMsg}">
                             this email has already been registered
                         </div>
                     </div>
