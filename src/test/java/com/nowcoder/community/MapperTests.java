@@ -1,6 +1,7 @@
 package com.nowcoder.community;
 
 import com.nowcoder.community.dao.DiscussPostMapper;
+import com.nowcoder.community.dao.UserMapper;
 import com.nowcoder.community.entity.DiscussPost;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +20,20 @@ public class MapperTests {
     @Autowired
     private DiscussPostMapper discussPostMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Test
     public void testSelectPosts() {
         List<DiscussPost> list = discussPostMapper.selectDiscussPosts(149, 0, 10);
         for(DiscussPost post : list) {
             System.out.println(post);
         }
+    }
+
+    @Test
+    public void testSelectUser() {
+        System.out.println(userMapper.selectById(11));
     }
 
 }
