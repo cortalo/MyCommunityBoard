@@ -1,3 +1,3 @@
 # My Community Forum
 
-TODO 6.6 ElasticSearch
+TODO 7.2 access permission control

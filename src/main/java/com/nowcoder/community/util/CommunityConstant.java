@@ -69,5 +69,20 @@ public interface CommunityConstant {
      */
     int SYSTEM_USER_ID = 1;
 
+    /**
+     * Access Permission: user
+     */
+    String AUTHORITY_USER = "user";
+
+    /**
+     * Access Permission: admin
+     */
+    String AUTHORITY_ADMIN = "admin";
+
+    /**
+     * Access Permission: moderator
+     */
+    String AUTHORITY_MODERATOR = "moderator";
+
 
 }
