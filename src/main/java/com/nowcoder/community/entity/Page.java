@@ -4,6 +4,7 @@ public class Page {
 
     private int current = 1;
     private int limit = 10;
+    private int rows;
     private String path;
 
     public int getCurrent() {
@@ -30,7 +31,37 @@ public class Page {
         this.path = path;
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
     public int getOffset() {
         return (current - 1) * limit;
+    }
+
+    /**
+     * get total number of pages
+     * @return
+     */
+    public int getTotal() {
+        if (rows % limit == 0) {
+            return rows / limit;
+        } else {
+            return rows / limit + 1;
+        }
+    }
+
+    public int getFrom() {
+        int from = current - 3;
+        return Math.max(from, 1);
+    }
+
+    public int getTo() {
+        int to = current + 3;
+        return Math.min(to, getTotal());
     }
 }
