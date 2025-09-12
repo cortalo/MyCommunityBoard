@@ -45,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Comm
                         AUTHORITY_ADMIN,
                         AUTHORITY_MODERATOR
                 )
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                .and().csrf().disable();
 
         http.exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPoint() {
