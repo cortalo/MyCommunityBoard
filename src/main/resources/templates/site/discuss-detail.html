@@ -12,7 +12,7 @@
 <body>
 <div class="nk-container">
     <!-- header -->
-    <header class="bg-dark sticky-top">
+    <header class="bg-dark sticky-top" th:replace="index::header">
     </header>
 
     <!-- content -->
@@ -22,7 +22,7 @@
             <!-- title -->
             <h6 class="mb-4">
                 <img src="http://static.nowcoder.com/images/img/icons/ico-discuss.png"/>
-                <span>title</span>
+                <span th:utext="${post.title}">title</span>
                 <div class="float-right">
                     <button type="button" class="btn btn-danger btn-sm">pin</button>
                     <button type="button" class="btn btn-danger btn-sm">feature</button>
@@ -35,9 +35,9 @@
                     <img src="http://images.nowcoder.com/head/1t.png" class="align-self-start mr-4 rounded-circle user-header" alt="profile photo" >
                 </a>
                 <div class="media-body">
-                    <div class="mt-0 text-warning">post username</div>
+                    <div class="mt-0 text-warning" th:utext="${author.username}">post username</div>
                     <div class="text-muted mt-3">
-                        published at <b>2019-04-15 15:32:18</b>
+                        published at <b th:text="${#dates.format(post.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
                         <ul class="d-inline float-right">
                             <li class="d-inline ml-2"><a href="#" class="text-primary">like 11</a></li>
                             <li class="d-inline ml-2">|</li>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <!-- discuss post content -->
-            <div class="mt-4 mb-3 content">
+            <div class="mt-4 mb-3 content" th:utext="${post.content}">
                 content
             </div>
         </div>
