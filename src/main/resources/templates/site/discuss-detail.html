@@ -69,11 +69,14 @@
 					<span th:utext="${post.title}">post title</span>
 					<div class="float-right">
 						<button type="button" class="btn btn-danger btn-sm"
-                                th:data-post-id="${post.id}" id="topBtn">Pin</button>
+                                th:data-post-id="${post.id}" id="topBtn"
+                                th:disabled="${post.type==1}">Pin</button>
 						<button type="button" class="btn btn-danger btn-sm"
-                                th:data-post-id="${post.id}" id="wonderfulBtn">Feature</button>
+                                th:data-post-id="${post.id}" id="wonderfulBtn"
+                                th:disabled="${post.status==1}">Feature</button>
 						<button type="button" class="btn btn-danger btn-sm"
-                                th:data-post-id="${post.id}" id="deleteBtn">Delete</button>
+                                th:data-post-id="${post.id}" id="deleteBtn"
+                                th:disabled="${post.status==2}">Delete</button>
 					</div>
 				</h6>
 				<!-- 作者 -->
