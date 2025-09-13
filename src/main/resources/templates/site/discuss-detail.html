@@ -68,9 +68,12 @@
 					<img src="http://static.nowcoder.com/images/img/icons/ico-discuss.png"/>
 					<span th:utext="${post.title}">post title</span>
 					<div class="float-right">
-						<button type="button" class="btn btn-danger btn-sm">置顶</button>
-						<button type="button" class="btn btn-danger btn-sm">加精</button>
-						<button type="button" class="btn btn-danger btn-sm">删除</button>
+						<button type="button" class="btn btn-danger btn-sm"
+                                th:data-post-id="${post.id}" id="topBtn">Pin</button>
+						<button type="button" class="btn btn-danger btn-sm"
+                                th:data-post-id="${post.id}" id="wonderfulBtn">Feature</button>
+						<button type="button" class="btn btn-danger btn-sm"
+                                th:data-post-id="${post.id}" id="deleteBtn">Delete</button>
 					</div>
 				</h6>
 				<!-- 作者 -->

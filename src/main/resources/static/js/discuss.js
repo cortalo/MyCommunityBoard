@@ -1,3 +1,10 @@
+$(function(){
+    $("#topBtn").click(setTop);
+    $("#wonderfulBtn").click(setWonderful);
+    $("#deleteBtn").click(setDelete);
+});
+
+
 function like(btn, entityType, entityId, entityUserId, postId) {
     $.post(
         CONTEXT_PATH + "/like",
@@ -14,6 +21,57 @@ function like(btn, entityType, entityId, entityUserId, postId) {
             if (data.code == 0) {
                 $(btn).children("i").text(data.likeCount);
                 $(btn).children("b").text(data.likeStatus==1?'liked':'like');
+            } else {
+                alert(data.msg);
+            }
+        }
+    );
+}
+
+function setTop() {
+    var btn = this;
+    var id = $(btn).data('post-id');
+    $.post(
+        CONTEXT_PATH + "/discuss/top",
+        {"id":id},
+        function(data) {
+            data = $.parseJSON(data);
+            if (data.code == 0) {
+                $("#topBtn").attr("disabled", "disabled");
+            } else {
+                alert(data.msg);
+            }
+        }
+    );
+}
+
+function setWonderful() {
+    var btn = this;
+    var id = $(btn).data('post-id');
+    $.post(
+        CONTEXT_PATH + "/discuss/wonderful",
+        {"id":id},
+        function(data) {
+            data = $.parseJSON(data);
+            if (data.code == 0) {
+                $("#wonderfulBtn").attr("disabled", "disabled");
+            } else {
+                alert(data.msg);
+            }
+        }
+    );
+}
+
+function setDelete() {
+    var btn = this;
+    var id = $(btn).data('post-id');
+    $.post(
+        CONTEXT_PATH + "/discuss/delete",
+        {"id":id},
+        function(data) {
+            data = $.parseJSON(data);
+            if (data.code == 0) {
+                location.href = CONTEXT_PATH + "/index";
             } else {
                 alert(data.msg);
             }
