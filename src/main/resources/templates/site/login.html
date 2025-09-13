@@ -19,12 +19,14 @@
     <div class="main">
         <div class="container pl-5 pr-5 pt-3 pb-3 mt-3 mb-3">
             <h3 class="text-center text-info border-bottom pb-3">Login</h3>
-            <form class="mt-5">
+            <form class="mt-5" method="post" th:action="@{/login}">
                 <div class="form-group row">
                     <label for="username" class="col-sm-2 col-form-label text-right">Username:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control is-invalid" id="username" placeholder="please enter your username" required>
-                        <div class="invalid-feedback">
+                        <input type="text" th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|"
+                               name="username" th:value="${param.username}"
+                               id="username" placeholder="please enter your username" required>
+                        <div class="invalid-feedback" th:text="${usernameMsg}">
                             username does not exist.
                         </div>
                     </div>
@@ -32,8 +34,10 @@
                 <div class="form-group row mt-4">
                     <label for="password" class="col-sm-2 col-form-label text-right">Password:</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control is-invalid" id="password" placeholder="please enter your password" required>
-                        <div class="invalid-feedback">
+                        <input type="password" th:class="|form-control ${passwordMsg!=null?'is-invalid':''}|"
+                               name="password" th:value="${param.password}"
+                               id="password" placeholder="please enter your password" required>
+                        <div class="invalid-feedback" th:value="${passwordMsg}">
                             password is not correct.
                         </div>
                     </div>
@@ -41,8 +45,10 @@
                 <div class="form-group row mt-4">
                     <label for="verifycode" class="col-sm-2 col-form-label text-right">Kaptcha:</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control is-invalid" id="verifycode" placeholder="Please enter the kaptcha.">
-                        <div class="invalid-feedback">
+                        <input type="text" th:class="|form-control ${kaptchaMsg!=null?'is-invalid':''}|"
+                               name="kaptchaCode"
+                               id="verifycode" placeholder="Please enter the kaptcha.">
+                        <div class="invalid-feedback" th:value="${kaptchaMsg}">
                             kaptcha is not correct.
                         </div>
                     </div>

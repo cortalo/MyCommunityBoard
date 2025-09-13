@@ -10,6 +10,9 @@ public class User {
     private String salt;
     private String email;
     private int type;
+    /**
+     * status: 0 is not activated, 1 is activated.
+     */
     private int status;
     private String activationCode;
     private String headerUrl;

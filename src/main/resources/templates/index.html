@@ -27,24 +27,26 @@
                             <a class="nav-link" th:href="@{/index}">Home</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical">
-                            <a class="nav-link position-relative" href="site/letter.html">Msgs<span class="badge badge-danger">12</span></a>
+                            <a class="nav-link position-relative" href="site/letter.html" th:if="${user!=null}">
+                                Msgs<span class="badge badge-danger">12</span>
+                            </a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical">
-                            <a class="nav-link" th:href="@{/register}">Register</a>
+                            <a class="nav-link" th:href="@{/register}" th:if="${user==null}">Register</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical">
-                            <a class="nav-link" th:href="@{/login}">Login</a>
+                            <a class="nav-link" th:href="@{/login}" th:if="${user==null}">Login</a>
                         </li>
-                        <li class="nav-item ml-3 btn-group-vertical dropdown">
+                        <li class="nav-item ml-3 btn-group-vertical dropdown" th:if="${user!=null}">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src="http://images.nowcoder.com/head/1t.png" class="rounded-circle" style="width:30px;"/>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item text-center" href="site/profile.html">Profile</a>
                                 <a class="dropdown-item text-center" href="site/setting.html">Setting</a>
-                                <a class="dropdown-item text-center" href="site/login.html">Logout</a>
+                                <a class="dropdown-item text-center" th:href="@{/logout}">Logout</a>
                                 <div class="dropdown-divider"></div>
-                                <span class="dropdown-item text-center text-secondary">nowcoder</span>
+                                <span class="dropdown-item text-center text-secondary" th:utext="${user.username}">nowcoder</span>
                             </div>
                         </li>
                     </ul>
