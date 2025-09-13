@@ -1,3 +1,3 @@
 # My Community Forum
 
-TODO 7.10 web UV DAU stat
+TODO 7.13 scheduling task
