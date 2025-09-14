@@ -1,5 +1,6 @@
 package com.nowcoder.community;
 
+import com.nowcoder.community.service.AlphaService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -37,6 +38,9 @@ public class ThreadPoolTests {
     // Spring scheduled pool
     @Autowired
     private ThreadPoolTaskScheduler taskScheduler;
+
+    @Autowired
+    private AlphaService alphaService;
 
     private void sleep(long m) {
         try {
@@ -104,6 +108,20 @@ public class ThreadPoolTests {
 
         Date startTime = new Date(System.currentTimeMillis() + 10000);
         taskScheduler.scheduleAtFixedRate(task, startTime, 1000);
+        sleep(30000);
+    }
+
+    @Test
+    public void testThreadPoolTaskExecutorSimple() {
+        for (int i = 0; i < 10; i++) {
+            alphaService.execute1();
+        }
+
+        sleep(10000);
+    }
+
+    @Test
+    public void testThreadPoolTaskSchedulerSimple() {
         sleep(30000);
     }
 
