@@ -70,6 +70,11 @@ public interface CommunityConstant {
     String TOPIC_DELETE = "delete";
 
     /**
+     * Event Topic: share
+     */
+    String TOPIC_SHARE = "share";
+
+    /**
      * System User Id
      */
     int SYSTEM_USER_ID = 1;
