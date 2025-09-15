@@ -1,3 +1,5 @@
 # My Community Forum
 
-TODO 7.19 generate long picture
+skip 7.23 and 7.27
+
+TODO: 8.2 project monitor
