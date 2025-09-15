@@ -203,7 +203,7 @@ public class UserController implements CommunityConstant {
 
         model.addAttribute("discussPostRows", discussPostRows);
 
-        List<DiscussPost> posts = discussPostService.findDiscussPosts(userId, page.getOffset(), page.getLimit());
+        List<DiscussPost> posts = discussPostService.findDiscussPosts(userId, page.getOffset(), page.getLimit(), 0);
         List<Map<String, Object>> postInfos = new ArrayList<>();
         if (posts != null) {
             for (DiscussPost post : posts) {
