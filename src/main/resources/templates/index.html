@@ -51,7 +51,7 @@
                     <!-- search -->
                     <form class="form-inline my-2 my-lg-0" action="site/search.html">
                         <input class="form-control mr-sm-2" type="search" aria-label="Search" />
-                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">search</button>
+                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
                     </form>
                 </div>
             </nav>
@@ -120,16 +120,16 @@
             <ul class="list-unstyled">
                 <li class="media pb-3 pt-3 mb-3 border-bottom" th:each="map:${posts}">
                     <a href="site/profile.html">
-                        <img src="http://images.nowcoder.com/head/1t.png" class="mr-4 rounded-circle" alt="profile photo" style="width:50px;height:50px;">
+                        <img th:src="${map.user.headerUrl}" class="mr-4 rounded-circle" alt="profile photo" style="width:50px;height:50px;">
                     </a>
                     <div class="media-body">
                         <h6 class="mt-0 mb-3">
-                            <a href="site/discuss-detail.html" th:utext="${map.post.title}">title</a>
-                            <span class="badge badge-secondary bg-primary">pin</span>
-                            <span class="badge badge-secondary bg-danger">feature</span>
+                            <a th:href="@{|/discuss/detail/${map.post.id}|}" th:utext="${map.post.title}">title</a>
+                            <span class="badge badge-secondary bg-primary" th:if="${map.post.type==1}">pin</span>
+                            <span class="badge badge-secondary bg-danger" th:if="${map.post.status==1}">feature</span>
                         </h6>
                         <div class="text-muted font-size-12">
-                            <u class="mr-3">username</u> published at
+                            <u class="mr-3" th:utext="${map.user.username}">username</u> published at
                             <b th:text="${#dates.format(map.post.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
                             <ul class="d-inline float-right">
                                 <li class="d-inline ml-2">like 11</li>
