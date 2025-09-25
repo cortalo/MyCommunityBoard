@@ -17,4 +17,11 @@ public interface DiscussPostMapper {
      */
     List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit);
 
+    /**
+     * return number of rows
+     * @param userId: if userId = 0, return total number of posts from any userId
+     * @return number of posts
+     */
+    int selectDiscussPostRows(int userId);
+
 }

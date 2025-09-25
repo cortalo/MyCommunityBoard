@@ -1,6 +1,7 @@
 package com.nowcoder.community.controller;
 
 import com.nowcoder.community.entity.DiscussPost;
+import com.nowcoder.community.entity.Page;
 import com.nowcoder.community.service.DiscussPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,13 @@ public class HomeController {
     private DiscussPostService discussPostService;
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
-    public String getIndexPage(Model model) {
-        List<DiscussPost> post_list = discussPostService.findDiscussPosts(0,0,10);
+    public String getIndexPage(Model model, Page page) {
+        /* page.current will get from url argument if present
+        *  otherwise page.current by default is 1 */
+        page.setPath("/index");
+        page.setLimit(10);
+        page.setRows(discussPostService.findDiscussPostsRows(0));
+        List<DiscussPost> post_list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
         if (post_list != null) {
             List<Map<String, Object>> posts = new ArrayList<>();
             for (DiscussPost post : post_list) {
