@@ -11,12 +11,12 @@
 <body>
 <div class="nk-container">
     <!-- header -->
-    <header class="bg-dark sticky-top">
+    <header class="bg-dark sticky-top" th:fragment="header">
         <div class="container">
             <!-- navigation -->
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <!-- logo -->
-                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" th:href="@{/index}"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -24,16 +24,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item ml-3 btn-group-vertical">
-                            <a class="nav-link" href="index.html">Home</a>
+                            <a class="nav-link" th:href="@{/index}">Home</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical">
                             <a class="nav-link position-relative" href="site/letter.html">Msgs<span class="badge badge-danger">12</span></a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical">
-                            <a class="nav-link" href="site/register.html">Register</a>
+                            <a class="nav-link" th:href="@{/register}" th:if="${user==null}">Register</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical">
-                            <a class="nav-link" href="site/login.html">Login</a>
+                            <a class="nav-link" th:href="@{/login}" th:if="${user==null}">Login</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,7 +42,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item text-center" href="site/profile.html">Profile</a>
                                 <a class="dropdown-item text-center" href="site/setting.html">Setting</a>
-                                <a class="dropdown-item text-center" href="site/login.html">Logout</a>
+                                <a class="dropdown-item text-center" th:href="@{/logout}">Logout</a>
                                 <div class="dropdown-divider"></div>
                                 <span class="dropdown-item text-center text-secondary">nowcoder</span>
                             </div>

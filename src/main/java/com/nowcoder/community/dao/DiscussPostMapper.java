@@ -24,4 +24,11 @@ public interface DiscussPostMapper {
      */
     int selectDiscussPostRows(int userId);
 
+    /**
+     * select by id
+     * @param id: id
+     * @return a discussPost
+     */
+    DiscussPost selectById(int id);
+
 }

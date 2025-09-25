@@ -28,4 +28,10 @@
         </if>
     </select>
 
+    <select id="selectById" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from discuss_post
+        where id = #{id}
+    </select>
+
 </mapper>
