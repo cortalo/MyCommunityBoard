@@ -8,6 +8,13 @@ import java.util.List;
 @Mapper
 public interface DiscussPostMapper {
 
+    /**
+     * select DiscussPosts from database
+     * @param userId: if userId = 0, return posts from any userId
+     * @param offset: offset
+     * @param limit: limit
+     * @return a list of discussPost
+     */
     List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit);
 
 }

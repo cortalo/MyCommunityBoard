@@ -1,15 +1,36 @@
 package com.nowcoder.community.controller;
 
+import com.nowcoder.community.entity.DiscussPost;
+import com.nowcoder.community.service.DiscussPostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 public class HomeController {
 
+    @Autowired
+    private DiscussPostService discussPostService;
+
     @RequestMapping(path = "/index", method = RequestMethod.GET)
     public String getIndexPage(Model model) {
+        List<DiscussPost> post_list = discussPostService.findDiscussPosts(0,0,10);
+        if (post_list != null) {
+            List<Map<String, Object>> posts = new ArrayList<>();
+            for (DiscussPost post : post_list) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("post", post);
+                posts.add(map);
+            }
+            model.addAttribute("posts", posts);
+        }
         return "/index";
     }
 
