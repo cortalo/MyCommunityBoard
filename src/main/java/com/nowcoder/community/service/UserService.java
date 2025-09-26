@@ -1,6 +1,8 @@
 package com.nowcoder.community.service;
 
+import com.nowcoder.community.dao.LoginTicketMapper;
 import com.nowcoder.community.dao.UserMapper;
+import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
@@ -22,6 +24,9 @@ public class UserService implements CommunityConstant {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Autowired
     private TemplateEngine templateEngine;
@@ -117,6 +122,64 @@ public class UserService implements CommunityConstant {
         } else {
             return ACTIVATION_FAILURE;
         }
+    }
+
+    /**
+     *
+     * @param username username input
+     * @param password password input
+     * @return the returned map may contain key usernameMsg, passwordMsg, ticket
+     */
+    public Map<String, Object> login(String username, String password) {
+        Map<String, Object> map = new HashMap<>();
+        // null value handling
+        if (username == null || StringUtils.isBlank(username)) {
+            map.put("usernameMsg", "username cannot be empty");
+            return map;
+        }
+        if (password == null || StringUtils.isBlank(password)) {
+            map.put("passwordMsg", "password cannot be empty");
+            return map;
+        }
+
+        // check if username exist
+        User user = userMapper.selectByUsername(username);
+        if (user == null) {
+            map.put("usernameMsg", "username does not exist");
+            return map;
+        }
+
+        // check if user is activated
+        if (user.getStatus() == 0) {
+            map.put("usernameMsg", "this account is not activated");
+            return map;
+        }
+
+        // check password
+        password = CommunityUtil.md5(password + user.getSalt());
+        if (!user.getPassword().equals(password)) {
+            map.put("passwordMsg", "password is wrong");
+            return map;
+        }
+
+        // construct login ticket
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setTicket(CommunityUtil.generateUUID());
+        loginTicket.setStatus(LOGIN_TICKET_VALID);
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + 3600L * 1000L * 24L * 30L));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+        map.put("ticket", loginTicket.getTicket());
+
+        return map;
+    }
+
+    public LoginTicket findLoginTicketByTicket(String ticket) {
+        return loginTicketMapper.selectByTicket(ticket);
+    }
+
+    public void logout(User user) {
+        loginTicketMapper.updateStatus(user.getId(), 1);
     }
 
 }

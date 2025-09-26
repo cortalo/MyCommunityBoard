@@ -1,14 +1,21 @@
 package com.nowcoder.community.controller;
 
 import com.google.code.kaptcha.Producer;
+import com.nowcoder.community.annotation.LoginRequired;
+import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityConstant;
+import com.nowcoder.community.util.CookieUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +36,9 @@ public class LoginController implements CommunityConstant {
 
     @Autowired
     private Producer kaptchaProducer;
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -90,6 +100,48 @@ public class LoginController implements CommunityConstant {
         } catch (IOException e) {
             logger.error("stream kaptcha image fail: " + e.getMessage());
         }
+    }
+
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public String login(Model model, User user, String kaptchaCode, HttpSession session ,HttpServletResponse response) {
+
+        String kaptchaText = (String) session.getAttribute("kaptcha");
+        if (kaptchaText == null || StringUtils.isBlank(kaptchaText)) {
+            model.addAttribute("kaptchaMsg", "server side kaptcha error");
+            return "/site/login";
+        }
+        if (kaptchaCode == null || StringUtils.isBlank(kaptchaCode) || !kaptchaText.equalsIgnoreCase(kaptchaCode)) {
+            model.addAttribute("kaptchaMsg", "kaptcha code is not correct");
+            return "/site/login";
+        }
+        Map<String, Object> loginResult = userService.login(user.getUsername(), user.getPassword());
+        if (loginResult.containsKey("ticket")) {
+            Cookie cookie = new Cookie("ticket", loginResult.get("ticket").toString());
+            cookie.setPath(contextPath);
+            /* cookie max age 3600 * 24 * 30 seconds */
+            cookie.setMaxAge(3600 * 24 * 30);
+            response.addCookie(cookie);
+            return "redirect:/index";
+        } else {
+            model.addAttribute("usernameMsg", loginResult.get("usernameMsg"));
+            model.addAttribute("passwordMsg", loginResult.get("passwordMsg"));
+            return "/site/login";
+        }
+
+    }
+
+    @LoginRequired
+    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request) {
+        String ticket = CookieUtil.getValue(request, "ticket");
+        if (ticket != null && !StringUtils.isBlank(ticket)) {
+            LoginTicket loginTicket = userService.findLoginTicketByTicket(ticket);
+            if (loginTicket != null && loginTicket.getStatus() == LOGIN_TICKET_VALID) {
+                User user = userService.findUserById(loginTicket.getUserId());
+                userService.logout(user);
+            }
+        }
+        return "redirect:/index";
     }
 
 }
