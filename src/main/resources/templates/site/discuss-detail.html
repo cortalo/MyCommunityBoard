@@ -32,7 +32,7 @@
             <!-- author -->
             <div class="media pb-3 border-bottom">
                 <a href="profile.html">
-                    <img src="http://images.nowcoder.com/head/1t.png" class="align-self-start mr-4 rounded-circle user-header" alt="profile photo" >
+                    <img th:src="${author.headerUrl}" class="align-self-start mr-4 rounded-circle user-header" alt="profile photo" >
                 </a>
                 <div class="media-body">
                     <div class="mt-0 text-warning" th:utext="${author.username}">post username</div>

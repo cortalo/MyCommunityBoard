@@ -72,7 +72,9 @@
                         <a class="nav-link" href="#">Hot</a>
                     </li>
                 </ul>
-                <button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal" data-target="#publishModal">Publish</button>
+                <button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal"
+                        data-target="#publishModal" th:if="${user!=null}">
+                    New Post</button>
             </div>
             <!-- pop-up window -->
             <div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="publishModalLabel" aria-hidden="true">
