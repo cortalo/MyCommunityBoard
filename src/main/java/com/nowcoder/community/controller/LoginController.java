@@ -2,16 +2,18 @@ package com.nowcoder.community.controller;
 
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.UserService;
+import com.nowcoder.community.util.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
 
 @Controller
-public class LoginController {
+public class LoginController implements CommunityConstant {
 
     @Autowired
     private UserService userService;
@@ -36,6 +38,23 @@ public class LoginController {
             model.addAttribute("emailMsg", map.get("emailMsg"));
             return "/site/register";
         }
+    }
+
+    @RequestMapping(path = "/activation/{userId}/{code}", method = RequestMethod.GET)
+    public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code) {
+        int result = userService.activate(userId, code);
+        if (result == ACTIVATION_SUCCESS) {
+            model.addAttribute("msg", "Activation success, you can login now.");
+            model.addAttribute("target", "/login");
+        } else if (result == ACTIVATION_REPEAT) {
+            model.addAttribute("msg", "This account was activated before, no need to repeat.");
+            model.addAttribute("target", "/login");
+        } else {
+            model.addAttribute("msg", "The activation link is wrong, please check the url in your email.");
+            model.addAttribute("target", "/index");
+        }
+
+        return "/site/operate-result";
     }
 
 }
