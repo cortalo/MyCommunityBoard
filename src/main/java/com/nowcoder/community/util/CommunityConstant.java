@@ -9,4 +9,15 @@ public interface CommunityConstant {
     int LOGIN_TICKET_VALID = 0;
     int LOGIN_TICKET_INVALID = 1;
 
+
+    /**
+     * entity type: post
+     */
+    int ENTITY_TYPE_POST = 1;
+
+    /**
+     * entity type: comment
+     */
+    int ENTITY_TYPE_COMMENT = 2;
+
 }

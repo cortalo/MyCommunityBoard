@@ -137,7 +137,7 @@
                             <ul class="d-inline float-right">
                                 <li class="d-inline ml-2">like 11</li>
                                 <li class="d-inline ml-2">|</li>
-                                <li class="d-inline ml-2">comment 7</li>
+                                <li class="d-inline ml-2">comment <span th:text="${map.post.commentCount}"></span></li>
                             </ul>
                         </div>
                     </div>
@@ -145,7 +145,7 @@
             </ul>
             <!-- pagination -->
             <!-- pagination -->
-            <nav class="mt-5">
+            <nav class="mt-5" th:if="${page.rows>0}" th:fragment="pagination">
                 <ul class="pagination justify-content-center">
                     <li class="page-item"><a class="page-link" th:href="@{${page.path}(current=1)}">First Page</a></li>
                     <li th:class="|page-item ${page.current==1?'disabled':''}|">
