@@ -9,6 +9,8 @@ public class Comment {
     // reply to which type of entity (post or comment...)
     private int entityType;
     // the id of the (post or comment...)
+    // when the comment is reply to inner reply, the entityId is still the comment on the top,
+    // instead of the inner reply's id.
     private int entityId;
     // the id of the user been replied (if it is a comment to a comment)
     private int targetId;
