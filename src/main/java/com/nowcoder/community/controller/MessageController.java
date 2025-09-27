@@ -92,6 +92,13 @@ public class MessageController {
         return "/site/letter-detail";
     }
 
+    @RequestMapping(path = "/letter/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String deletaMessage(int id) {
+        messageService.deleteMessage(id);
+        return CommunityUtil.getJSONString(0);
+    }
+
     private User getLetterTarget(String conversationId) {
         String[] ids = conversationId.split("_");
         int id0 = Integer.parseInt(ids[0]);
