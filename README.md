@@ -26,6 +26,7 @@ docker container run --name myredis \
 
 # Connect to Redis CLI
 docker container exec -it myredis redis-cli
+127.0.0.1:6379> exit
 ```
 
 for the model itself it is easy to use, e.g., `th:if="${commentNotice!=null}"` as filter.
