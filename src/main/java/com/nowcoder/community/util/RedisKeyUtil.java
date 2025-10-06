@@ -12,4 +12,10 @@ public class RedisKeyUtil {
         return PREFIX_ENTITY_LIKE + SPLIT + entityType + SPLIT + entityId;
     }
 
+    // like for some user
+    // like::user::userId -> int
+    public static String getUserLikeKey(int userId) {
+        return PREFIX_ENTITY_LIKE + SPLIT + userId;
+    }
+
 }
