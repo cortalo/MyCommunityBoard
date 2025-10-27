@@ -72,6 +72,38 @@ docker container start myzookeeper
 docker container start mykafka
 ```
 
+## ElasticSearch
+
+```
+docker container run --name myelasticsearch \
+-e "discovery.type=single-node" \
+-e "ELASTIC_PASSWORD=mypassword" \
+-e "xpack.security.enabled=true" \
+-v elasticsearch_data:/usr/share/elasticsearch/data \
+-p 9200:9200 \
+-p 9300:9300 \
+-d elasticsearch:8.11.0
+
+# 1. Copy the zip file into the container
+docker cp elasticsearch-analysis-ik-8.11.0.zip myelasticsearch:/tmp/
+
+# 2. Install the plugin
+docker exec -it myelasticsearch \
+  /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///tmp/elasticsearch-analysis-ik-8.11.0.zip
+
+# 3. Restart the container
+docker restart myelasticsearch
+
+curl -u elastic:mypassword -X GET "localhost:9200/_cat/health?v"
+curl -u elastic:mypassword -X GET "localhost:9200/_cat/nodes?v"
+curl -u elastic:mypassword -X GET "localhost:9200/_cat/indices?v"
+curl -u elastic:mypassword -X PUT "localhost:9200/test"
+curl -u elastic:mypassword -X DELETE "localhost:9200/test"
+
+```
+
+48min
+
 ## Production
 
 update the password for sql, email and domain address after production
