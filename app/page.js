@@ -3,8 +3,12 @@ import Link from "next/link";
 import Pagination from "./_components/Pagination";
 import PostItem from "./_components/PostItem";
 import Filter from "./_components/Filter";
+import { getDiscussPosts } from "./_lib/DiscussPostMapper";
 
-function page() {
+async function page() {
+  let discussPosts = await getDiscussPosts();
+  console.log(discussPosts);
+
   return (
     <div className="main">
       <div className="container">
@@ -21,7 +25,11 @@ function page() {
         </div>
         {/* pop up window for publish */}
 
-        <PostItem />
+        <ul className="list-unstyled">
+          {discussPosts.map((post) => (
+            <PostItem post={post} key={post.id} />
+          ))}
+        </ul>
         <Pagination />
       </div>
     </div>
