@@ -4,8 +4,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "images.nowcoder.com",
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
       },
     ],
   },

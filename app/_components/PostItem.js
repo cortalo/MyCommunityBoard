@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { selectUserById } from "../_lib/UserMapper";
 
-function PostItem({ post }) {
+async function PostItem({ post }) {
+  let users = await selectUserById(post.userId);
   return (
     <li className="media pb-3 pt-3 mb-3 border-bottom">
       <Link href="/">
         <Image
-          src="http://images.nowcoder.com/head/1t.png"
+          src={users[0].image}
           className="mr-4 rounded-circle"
           alt="user profile photo"
           width={50}
@@ -18,7 +20,8 @@ function PostItem({ post }) {
           <Link href="/">{post.title}</Link>
         </h6>
         <div className="text-muted font-size-12">
-          <u className="mr-3">username</u> published at <b>{post.created_at}</b>
+          <u className="mr-3">{users[0].name + " (" + users[0].email + ")"}</u>{" "}
+          published at <b>{post.created_at}</b>
           <ul className="d-inline float-right">
             <li className="d-inline ml-2">like (11)</li>
             <li className="d-inline ml-2">|</li>
