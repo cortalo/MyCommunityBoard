@@ -1,6 +1,10 @@
-import Link from "next/link";
+"use client";
 
-async function Header() {
+import Link from "next/link";
+import { useState } from "react";
+
+function Header() {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <header className="bg-dark sticky-top">
       <div className="container">
@@ -9,6 +13,7 @@ async function Header() {
           <button
             className="navbar-toggler"
             type="button"
+            onClick={() => setIsOpen(!isOpen)}
             data-toggle="collapse"
             data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
@@ -17,7 +22,10 @@ async function Header() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <div
+            className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}
+            id="navbarSupportedContent"
+          >
             <ul className="navbar-nav mr-auto">
               <li className="nav-item ml-3 btn-group-vertical">
                 <Link className="nav-link" href="/">
