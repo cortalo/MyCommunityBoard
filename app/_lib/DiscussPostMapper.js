@@ -28,6 +28,19 @@ export async function selectDiscussPosts(userId, offset, limit) {
   return data;
 }
 
+export async function selectDiscussPostById(id) {
+  let query = supabase.from("DiscussPost").select("*").eq("id", id);
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Discuss posts cannot be loaded");
+  }
+
+  return data[0];
+}
+
 /**
  * Get the total count of DiscussPosts
  * @param {number} userId - if userId = 0, return count of all posts, otherwise count for specific user

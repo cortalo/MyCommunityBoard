@@ -17,11 +17,11 @@ async function PostItem({ post }) {
       </Link>
       <div className="media-body">
         <h6 className="mt-0 mb-3">
-          <Link href="/">{post.title}</Link>
+          <Link href={`/discuss/${post.id}`}>{post.title}</Link>
         </h6>
         <div className="text-muted font-size-12">
           <u className="mr-3">{users[0].name + " (" + users[0].email + ")"}</u>{" "}
-          published at <b>{post.created_at}</b>
+          published at <b>{new Date(post.created_at).toLocaleDateString()}</b>
           <ul className="d-inline float-right">
             <li className="d-inline ml-2">like (11)</li>
             <li className="d-inline ml-2">|</li>
