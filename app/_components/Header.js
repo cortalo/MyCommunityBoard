@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-function Header() {
+function Header({ session }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <header className="bg-dark sticky-top">
@@ -32,31 +32,34 @@ function Header() {
                   Home
                 </Link>
               </li>
-              <li className="nav-item ml-3 btn-group-vertical">
-                <Link className="nav-link" href="/">
-                  Msgs<span className="badge badge-danger">12</span>
-                </Link>
-              </li>
-              <li className="nav-item ml-3 btn-group-vertical">
-                <Link className="nav-link" href="/">
-                  Register
-                </Link>
-              </li>
-              <li className="nav-item ml-3 btn-group-vertical">
-                <Link className="nav-link" href="/">
-                  Login
-                </Link>
-              </li>
-              <li className="nav-item ml-3 btn-group-vertical">
-                <Link className="nav-link" href="/">
-                  Profile
-                </Link>
-              </li>
-              <li className="nav-item ml-3 btn-group-vertical">
-                <Link className="nav-link" href="/">
-                  Logout
-                </Link>
-              </li>
+              {session && (
+                <li className="nav-item ml-3 btn-group-vertical">
+                  <Link className="nav-link" href="/">
+                    Msgs<span className="badge badge-danger">12</span>
+                  </Link>
+                </li>
+              )}
+              {!session && (
+                <li className="nav-item ml-3 btn-group-vertical">
+                  <Link className="nav-link" href="/api/auth/signin">
+                    Login
+                  </Link>
+                </li>
+              )}
+              {session && (
+                <li className="nav-item ml-3 btn-group-vertical">
+                  <Link className="nav-link" href="/">
+                    {session.user.name}
+                  </Link>
+                </li>
+              )}
+              {session && (
+                <li className="nav-item ml-3 btn-group-vertical">
+                  <Link className="nav-link" href="/api/auth/signout">
+                    Logout
+                  </Link>
+                </li>
+              )}
             </ul>
             <form
               className="form-inline my-2 my-lg-0"

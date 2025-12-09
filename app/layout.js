@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
+import { auth } from "./_lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +18,8 @@ export const metadata = {
   description: "A complete forum",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await auth();
   return (
     <html lang="en">
       <head>
@@ -30,7 +32,7 @@ export default function RootLayout({ children }) {
       <body>
         <div id="root">
           <div className="nk-container">
-            <Header />
+            <Header session={session} />
             {children}
           </div>
         </div>
