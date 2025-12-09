@@ -3,11 +3,10 @@ import Link from "next/link";
 import Pagination from "./_components/Pagination";
 import PostItem from "./_components/PostItem";
 import Filter from "./_components/Filter";
-import { getDiscussPosts } from "./_lib/DiscussPostMapper";
+import { getDiscussPosts, selectDiscussPosts } from "./_lib/DiscussPostMapper";
 
 async function page() {
-  let discussPosts = await getDiscussPosts();
-  console.log(discussPosts);
+  let discussPosts = await selectDiscussPosts(0, 0, 10);
 
   return (
     <div className="main">
