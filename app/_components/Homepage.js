@@ -1,3 +1,4 @@
+import { auth } from "../_lib/auth";
 import {
   getDiscussPostCount,
   selectDiscussPosts,
@@ -5,26 +6,16 @@ import {
 import Filter from "./Filter";
 import Pagination from "./Pagination";
 import PostItem from "./PostItem";
+import PublishPost from "./PublishPost";
 
 async function Homepage({ offset }) {
+  const session = await auth();
   let discussPosts = await selectDiscussPosts(0, offset * 10, 10);
   let postCount = await getDiscussPostCount(0);
   return (
     <div className="main">
       <div className="container">
-        <div className="position-relative">
-          <Filter />
-          <button
-            type="button"
-            className="btn btn-primary btn-sm position-absolute rt-0"
-            data-toggle="modal"
-            data-target="#publishModal"
-          >
-            publish
-          </button>
-        </div>
-        {/* pop up window for publish */}
-
+        <PublishPost session={session} />
         <ul className="list-unstyled">
           {discussPosts.map((post) => (
             <PostItem post={post} key={post.id} />
