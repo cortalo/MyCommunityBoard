@@ -2,6 +2,12 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
 import { auth } from "./_lib/auth";
+import {
+  insertData,
+  selectUserByEmail,
+  updateUserImage,
+  updateUserName,
+} from "./_lib/UserMapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,6 +26,27 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await auth();
+  if (session?.user?.email) {
+    const user = await selectUserByEmail(session.user.email);
+    if (user.length === 0) {
+      try {
+        insertData("users", {
+          email: session.user.email,
+          name: session.user.name,
+          image: session.user.image,
+        });
+      } catch (error) {
+        console.log("failed: ", error);
+      }
+    } else {
+      if (user[0].name != session.user.name) {
+        updateUserName("users", user[0].id, session.user.name);
+      }
+      if (user[0].image != session.user.image) {
+        updateUserImage("users", user[0].id, session.user.image);
+      }
+    }
+  }
   return (
     <html lang="en">
       <head>

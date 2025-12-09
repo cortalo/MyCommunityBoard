@@ -30,3 +30,44 @@ export async function selectUserByEmail(email) {
 
   return data;
 }
+
+export async function insertData(tableName, dataObject) {
+  const { data, error } = await supabase.from(tableName).insert([dataObject]);
+
+  if (error) {
+    console.log("Error inserting data:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updateUserName(tableName, id, value) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .update({ name: value })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.log("Error updating data:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updateUserImage(tableName, id, value) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .update({ image: value })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.log("Error updating data:", error);
+    throw error;
+  }
+
+  return data;
+}
