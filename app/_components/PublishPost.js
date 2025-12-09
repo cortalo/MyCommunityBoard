@@ -2,9 +2,31 @@
 
 import { useState } from "react";
 import Filter from "./Filter";
+import { createPost } from "../_lib/DiscussPostMapper";
 
 function PublishPost({ session }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData(e.target);
+    const result = await createPost(formData);
+
+    setLoading(false);
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setIsOpen(false);
+      e.target.reset(); // Clear form
+    }
+  }
+
   return (
     <>
       <div className="position-relative">
@@ -47,7 +69,7 @@ function PublishPost({ session }) {
               </button>
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={handleSubmit} id="publishForm">
                 <div className="form-group">
                   <label htmlFor="recipient-name" className="col-form-label">
                     Title:
@@ -55,7 +77,9 @@ function PublishPost({ session }) {
                   <input
                     type="text"
                     className="form-control"
-                    id="recipient-name"
+                    id="title"
+                    name="title"
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -64,8 +88,10 @@ function PublishPost({ session }) {
                   </label>
                   <textarea
                     className="form-control"
-                    id="message-text"
+                    id="content"
+                    name="content"
                     rows="15"
+                    required
                   ></textarea>
                 </div>
               </form>
@@ -76,11 +102,17 @@ function PublishPost({ session }) {
                 onClick={() => setIsOpen(false)}
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                disabled={loading}
               >
                 Cancel
               </button>
-              <button type="button" className="btn btn-primary" id="publishBtn">
-                Publish
+              <button
+                type="submit"
+                form="publishForm"
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                {loading ? "Publishing..." : "Publish"}
               </button>
             </div>
           </div>

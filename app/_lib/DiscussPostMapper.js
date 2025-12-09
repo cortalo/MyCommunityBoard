@@ -1,4 +1,8 @@
+"use server";
+import { revalidatePath } from "next/cache";
 import supabase from "./supabase";
+import { auth } from "./auth";
+import { selectUserByEmail } from "./UserMapper";
 
 /**
  * Select DiscussPosts from database
@@ -64,4 +68,43 @@ export async function getDiscussPostCount(userId) {
   }
 
   return count;
+}
+
+export async function createPost(formData) {
+  const session = await auth();
+
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
+  const title = formData.get("title");
+  const content = formData.get("content");
+
+  // Validate
+  if (!title || !content) {
+    return { error: "Title and content are required" };
+  }
+
+  const user = await selectUserByEmail(session.user.email);
+
+  const { data, error } = await supabase
+    .from("DiscussPost")
+    .insert([
+      {
+        title,
+        content,
+        userId: user[0].id, // or however you store user ID
+        created_at: new Date().toISOString(),
+      },
+    ])
+    .select();
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  // Refresh the page data
+  revalidatePath("/");
+
+  return { success: true, data };
 }

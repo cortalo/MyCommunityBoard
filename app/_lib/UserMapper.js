@@ -17,3 +17,16 @@ export async function selectUserById(id) {
 
   return data;
 }
+
+export async function selectUserByEmail(email) {
+  let query = supabase.from("users").select("*").eq("email", email);
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Discuss posts cannot be loaded");
+  }
+
+  return data;
+}
