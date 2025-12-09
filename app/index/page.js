@@ -1,4 +1,4 @@
-import Homepage from "./_components/Homepage";
+import Homepage from "../_components/Homepage";
 
 async function page() {
   return <Homepage offset={0} />;
