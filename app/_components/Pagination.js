@@ -36,7 +36,7 @@ function getPaginationPages(postCount, limit, current) {
 }
 
 function Pagination({ path, postCount, limit, current }) {
-  const last = (postCount + limit - 1) / limit - 1;
+  const last = Math.floor((postCount + limit - 1) / limit) - 1;
   return (
     <nav className="mt-5">
       <ul className="pagination justify-content-center">
