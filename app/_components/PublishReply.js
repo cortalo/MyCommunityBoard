@@ -3,7 +3,8 @@
 import { useState } from "react";
 import styles from "./PublishComment.module.css";
 import { addComment } from "../_lib/CommentMapper";
-function PublishComment({ postId, userEmail, targetId }) {
+
+function PublishReply({ commentId, postId, userEmail, targetId }) {
   const login = userEmail ? true : false;
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,10 +16,10 @@ function PublishComment({ postId, userEmail, targetId }) {
     setError(null);
 
     const formData = new FormData();
-    formData.append("postId", targetId);
+    formData.append("postId", postId);
     formData.append("userEmail", userEmail);
-    formData.append("entityType", 0);
-    formData.append("entityId", postId);
+    formData.append("entityType", 1);
+    formData.append("entityId", commentId);
     formData.append("targetId", targetId);
     formData.append("content", content);
     formData.append("status", 0);
@@ -33,34 +34,35 @@ function PublishComment({ postId, userEmail, targetId }) {
   };
 
   return (
-    <div className="container mt-3">
-      <form onSubmit={handleSubmit} className={styles.replyform}>
-        <p className="mt-3">
-          <a name={styles.replyform}></a>
-          <textarea
+    <li className="pb-3 pt-3">
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input
+            type="text"
+            className={styles.inputsize}
             placeholder={
-              userEmail
-                ? "Please enter your comment."
-                : "Login to comment the post."
+              login
+                ? "Please enter your reply."
+                : "Login to reply to the comment."
             }
             value={content}
             onChange={(e) => setContent(e.target.value)}
             disabled={loading || !login}
             required
-          ></textarea>
-        </p>
-        <p className="text-right">
+          />
+        </div>
+        <div className="text-right mt-2">
           <button
             type="submit"
             className="btn btn-primary btn-sm"
             disabled={loading || !login}
           >
-            {loading ? "Posting..." : "Comment"}
+            {loading ? "Posting..." : "reply"}
           </button>
-        </p>
+        </div>
       </form>
-    </div>
+    </li>
   );
 }
 
-export default PublishComment;
+export default PublishReply;

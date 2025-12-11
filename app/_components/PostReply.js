@@ -3,10 +3,15 @@ import styles from "./PostReply.module.css";
 import { selectUserById } from "../_lib/UserMapper";
 import CommentReply from "./CommentReply";
 import { selectCommentReplys } from "../_lib/CommentMapper";
+import PublishReply from "./PublishReply";
+import { auth } from "../_lib/auth";
 
 async function PostReply({ postComment, index }) {
   const user = await selectUserById(postComment.userId);
   const replys = await selectCommentReplys(postComment.id);
+  const session = await auth();
+  const userEmail = session?.user?.email;
+
   return (
     <li className="media pb-3 pt-3 mb-3 border-bottom">
       <a href="profile.html">
@@ -52,20 +57,12 @@ async function PostReply({ postComment, index }) {
             <CommentReply reply={reply} key={reply.id} />
           ))}
           {/* reply enter box */}
-          <li className="pb-3 pt-3">
-            <div>
-              <input
-                type="text"
-                className={styles.inputsize}
-                placeholder="please enter your reply."
-              />
-            </div>
-            <div className="text-right mt-2">
-              <button type="button" className="btn btn-primary btn-sm">
-                reply
-              </button>
-            </div>
-          </li>
+          <PublishReply
+            commentId={postComment.id}
+            postId={postComment.entityId}
+            userEmail={userEmail}
+            targetId={user[0].id}
+          />
         </ul>
       </div>
     </li>

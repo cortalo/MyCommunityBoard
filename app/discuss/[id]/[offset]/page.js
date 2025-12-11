@@ -28,11 +28,11 @@ async function page({ params }) {
               <b className="square"></b> <i>30</i> comments
             </h6>
           </div>
-          <div className="col-4 text-right">
+          {/* <div className="col-4 text-right">
             <a href="#replyform" className="btn btn-primary btn-sm">
               Comment
             </a>
-          </div>
+          </div> */}
         </div>
 
         {/* comment list */}

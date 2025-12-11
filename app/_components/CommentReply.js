@@ -19,12 +19,12 @@ async function CommentReply({ reply }) {
               like(1)
             </a>
           </li>
-          <li className="d-inline ml-2">|</li>
+          {/* <li className="d-inline ml-2">|</li>
           <li className="d-inline ml-2">
             <a href="#huifu01" data-toggle="collapse" className="text-primary">
               reply
             </a>
-          </li>
+          </li> */}
         </ul>
         <div id="huifu01" className="mt-4 collapse">
           <div>
