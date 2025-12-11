@@ -1,0 +1,43 @@
+import Image from "next/image";
+import { selectUserById } from "../_lib/UserMapper";
+
+async function LetterConversationItem({ conversation, user }) {
+  const targetId =
+    user.id == conversation.fromId ? conversation.toId : conversation.fromId;
+
+  const targetUser = await selectUserById(targetId);
+  return (
+    <li className="media pb-3 pt-3 mb-3 border-bottom position-relative">
+      <span className="badge badge-danger">3</span>
+      <a href="profile.html">
+        <Image
+          src={targetUser[0].image}
+          className="mr-4 rounded-circle user-header"
+          alt="user header"
+          width={50}
+          height={50}
+        />
+      </a>
+      <div className="media-body">
+        <h6 className="mt-0 mb-3">
+          <span className="text-success">{targetUser[0].name}</span>
+          <span className="float-right text-muted font-size-12">
+            {new Date(conversation.created_at).toLocaleDateString()}
+          </span>
+        </h6>
+        <div>
+          <a href="letter-detail.html">{conversation.content}</a>
+          <ul className="d-inline font-size-12 float-right">
+            <li className="d-inline ml-2">
+              <a href="#" className="text-primary">
+                <i>10</i> conversations in total
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+  );
+}
+
+export default LetterConversationItem;

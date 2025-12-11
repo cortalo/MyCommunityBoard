@@ -34,7 +34,7 @@ function Header({ session }) {
               </li>
               {session && (
                 <li className="nav-item ml-3 btn-group-vertical">
-                  <Link className="nav-link" href="/">
+                  <Link className="nav-link" href="/letter">
                     Msgs<span className="badge badge-danger">12</span>
                   </Link>
                 </li>
