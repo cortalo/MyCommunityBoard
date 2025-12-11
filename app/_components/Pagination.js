@@ -7,7 +7,7 @@ import Link from "next/link";
  * @return {Array<number>} array of page numbers to display
  */
 function getPaginationPages(postCount, limit, current) {
-  const totalPages = Math.ceil(postCount / limit);
+  const totalPages = Math.max(1, Math.ceil(postCount / limit));
   const maxPagesToShow = 5; // current + 3 left + 3 right
 
   // If total pages is less than max, show all pages
@@ -36,7 +36,7 @@ function getPaginationPages(postCount, limit, current) {
 }
 
 function Pagination({ path, postCount, limit, current }) {
-  const last = Math.floor((postCount + limit - 1) / limit) - 1;
+  const last = Math.max(0, Math.floor((postCount + limit - 1) / limit) - 1);
   return (
     <nav className="mt-5">
       <ul className="pagination justify-content-center">
