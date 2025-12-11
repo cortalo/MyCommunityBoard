@@ -2,6 +2,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { selectDiscussPostById } from "@/app/_lib/DiscussPostMapper";
 import { selectUserById } from "@/app/_lib/UserMapper";
+import PostReplys from "@/app/_components/PostReplys";
 
 async function page({ params }) {
   let { id } = await params;
@@ -87,120 +88,7 @@ async function page({ params }) {
         </div>
 
         {/* comment list */}
-        <ul className="list-unstyled mt-4">
-          <li className="media pb-3 pt-3 mb-3 border-bottom">
-            <a href="profile.html">
-              <Image
-                src="http://images.nowcoder.com/head/2t.png"
-                className="align-self-start mr-4 rounded-circle user-header"
-                alt="profile photo"
-                width={50}
-                height={50}
-              />
-            </a>
-            <div className="media-body">
-              <div className="mt-0">
-                <span className="font-size-12 text-success">Jane Smith</span>
-                <span
-                  className={`badge badge-secondary float-right ${styles.floor}`}
-                >
-                  1#
-                </span>
-              </div>
-              <div className="mt-2">
-                I recommend starting with the official Spring Boot
-                documentation. It is well-structured and beginner-friendly.
-                Also, try building small projects along the way!
-              </div>
-              <div className="mt-4 text-muted font-size-12">
-                <span>
-                  published at <b>2019-04-15 15:32:18</b>
-                </span>
-                <ul className="d-inline float-right">
-                  <li className="d-inline ml-2">
-                    <a href="#" className="text-primary">
-                      like(1)
-                    </a>
-                  </li>
-                  <li className="d-inline ml-2">|</li>
-                  <li className="d-inline ml-2">
-                    <a href="#" className="text-primary">
-                      comment(2)
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              {/* reply list */}
-              <ul className="list-unstyled mt-4 bg-gray p-3 font-size-12 text-muted">
-                <li className="pb-3 pt-3 mb-3 border-bottom">
-                  <div>
-                    <span>
-                      <b className="text-info">Mike Johnson</b>:&nbsp;&nbsp;
-                    </span>
-                    <span>
-                      Great advice! I would also add that Spring in Action book
-                      is excellent.
-                    </span>
-                  </div>
-                  <div className="mt-3">
-                    <span>2019-04-15 15:32:18</span>
-                    <ul className="d-inline float-right">
-                      <li className="d-inline ml-2">
-                        <a href="#" className="text-primary">
-                          like(1)
-                        </a>
-                      </li>
-                      <li className="d-inline ml-2">|</li>
-                      <li className="d-inline ml-2">
-                        <a
-                          href="#huifu01"
-                          data-toggle="collapse"
-                          className="text-primary"
-                        >
-                          reply
-                        </a>
-                      </li>
-                    </ul>
-                    <div id="huifu01" className="mt-4 collapse">
-                      <div>
-                        <input
-                          type="text"
-                          className={styles.inputsize}
-                          placeholder="reply to Mike Johnson"
-                        />
-                      </div>
-                      <div className="text-right mt-2">
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-sm"
-                        >
-                          reply
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                {/* reply enter box */}
-                <li className="pb-3 pt-3">
-                  <div>
-                    <input
-                      type="text"
-                      className={styles.inputsize}
-                      placeholder="please enter your reply."
-                    />
-                  </div>
-                  <div className="text-right mt-2">
-                    <button type="button" className="btn btn-primary btn-sm">
-                      reply
-                    </button>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
+        <PostReplys id={id} />
       </div>
 
       {/* comment enter box */}
