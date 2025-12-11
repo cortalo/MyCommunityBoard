@@ -3,11 +3,16 @@ import styles from "./page.module.css";
 import { selectDiscussPostById } from "@/app/_lib/DiscussPostMapper";
 import { selectUserById } from "@/app/_lib/UserMapper";
 import PostReplys from "@/app/_components/PostReplys";
+import PublishComment from "@/app/_components/PublishComment";
+import { auth } from "@/app/_lib/auth";
 
 async function page({ params }) {
   let { id } = await params;
   let post = await selectDiscussPostById(id);
   let user = await selectUserById(post.userId);
+  const session = await auth();
+  const userEmail = session?.user?.email;
+
   return (
     <div className="main">
       {/* discuss post detail */}
@@ -70,7 +75,6 @@ async function page({ params }) {
         {/* discuss post content */}
         <div className={`mt-4 mb-3 ${styles.content}`}>{post.content}</div>
       </div>
-
       {/* comment */}
       <div className="container mt-3">
         {/* number of comments */}
@@ -90,21 +94,8 @@ async function page({ params }) {
         {/* comment list */}
         <PostReplys id={id} />
       </div>
-
       {/* comment enter box */}
-      <div className="container mt-3">
-        <div className={styles.replyform}>
-          <p className="mt-3">
-            <a name={styles.replyform}></a>
-            <textarea placeholder="Please enter your comment."></textarea>
-          </p>
-          <p className="text-right">
-            <button type="submit" className="btn btn-primary btn-sm">
-              Comment
-            </button>
-          </p>
-        </div>
-      </div>
+      <PublishComment postId={id} userEmail={userEmail} targetId={user[0].id} />
     </div>
   );
 }

@@ -1,4 +1,8 @@
+"use server";
+import { revalidatePath } from "next/cache";
 import supabase from "./supabase";
+import { auth } from "./auth";
+import { selectUserByEmail } from "./UserMapper";
 
 export async function selectPostComments(postId, offset, limit) {
   let query = supabase.from("Comment").select("*").eq("entityType", 0);
@@ -27,4 +31,45 @@ export async function selectCommentReplys(commentId) {
   }
 
   return data;
+}
+
+export async function addComment(formData) {
+  const session = await auth();
+
+  if (!session || session.user.email != formData.get("userEmail")) {
+    return { error: "Unauthorized" };
+  }
+
+  const content = formData.get("content");
+
+  // Validate
+  if (!content) {
+    return { error: "Content are required" };
+  }
+
+  const user = await selectUserByEmail(session.user.email);
+
+  const { data, error } = await supabase
+    .from("Comment")
+    .insert([
+      {
+        entityType: formData.get("entityType"),
+        entityId: formData.get("entityId"),
+        targetId: formData.get("targetId"),
+        content,
+        status: formData.get("status"),
+        userId: user[0].id, // or however you store user ID
+        created_at: new Date().toISOString(),
+      },
+    ])
+    .select();
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  // Refresh the page data
+  revalidatePath("/discuss/" + formData.get("postId"));
+
+  return { success: true, data };
 }
