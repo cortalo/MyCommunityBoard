@@ -3,10 +3,12 @@ import { revalidatePath } from "next/cache";
 import supabase from "./supabase";
 import { auth } from "./auth";
 import { selectUserByEmail } from "./UserMapper";
+import { updatePostCommentCount } from "./DiscussPostMapper";
 
 export async function selectPostComments(postId, offset, limit) {
   let query = supabase.from("Comment").select("*").eq("entityType", 0);
   query = query.eq("entityId", postId);
+  query = query.order("id", { ascending: true });
   query.range(offset, offset + limit - 1);
 
   const { data, error } = await query;
@@ -68,6 +70,17 @@ export async function addComment(formData) {
     return { error: error.message };
   }
 
+  if (formData.get("entityType") == 0) {
+    const commentCount = await getCommenttCount(formData.get("entityId"));
+    const { data, error } = await updatePostCommentCount(
+      formData.get("entityId"),
+      commentCount
+    );
+    if (error) {
+      return { error: error.message };
+    }
+  }
+
   // Refresh the page data
   revalidatePath("/discuss/" + formData.get("postId"));
 
@@ -91,6 +104,23 @@ export async function getCommenttCount(postId) {
   if (error) {
     console.log(error);
     throw new Error("Comment count cannot be loaded");
+  }
+
+  return count;
+}
+
+export async function getReplyCount(commentId) {
+  let query = supabase
+    .from("Comment")
+    .select("*", { count: "exact", head: true });
+  query = query.eq("entityType", 1);
+  query = query.eq("entityId", commentId);
+
+  const { count, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Reply count cannot be loaded");
   }
 
   return count;

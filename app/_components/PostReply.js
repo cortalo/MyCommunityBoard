@@ -2,12 +2,13 @@ import Image from "next/image";
 import styles from "./PostReply.module.css";
 import { selectUserById } from "../_lib/UserMapper";
 import CommentReply from "./CommentReply";
-import { selectCommentReplys } from "../_lib/CommentMapper";
+import { getReplyCount, selectCommentReplys } from "../_lib/CommentMapper";
 import PublishReply from "./PublishReply";
 import { auth } from "../_lib/auth";
 
 async function PostReply({ postComment, index }) {
   const user = await selectUserById(postComment.userId);
+  const replyCount = await getReplyCount(postComment.id);
   const replys = await selectCommentReplys(postComment.id);
   const session = await auth();
   const userEmail = session?.user?.email;
@@ -45,7 +46,7 @@ async function PostReply({ postComment, index }) {
             <li className="d-inline ml-2">|</li>
             <li className="d-inline ml-2">
               <a href="#" className="text-primary">
-                comment(2)
+                comment({replyCount})
               </a>
             </li>
           </ul>

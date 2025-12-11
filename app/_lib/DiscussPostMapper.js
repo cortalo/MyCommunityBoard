@@ -18,6 +18,7 @@ export async function selectDiscussPosts(userId, offset, limit) {
   if (userId !== 0) {
     query = query.eq("user_id", userId); // Use 'userId' if that's your column name
   }
+  query.order("id", { ascending: false });
 
   // Apply pagination with offset and limit
   query = query.range(offset, offset + limit - 1);
@@ -107,4 +108,19 @@ export async function createPost(formData) {
   revalidatePath("/");
 
   return { success: true, data };
+}
+
+export async function updatePostCommentCount(id, value) {
+  const { data, error } = await supabase
+    .from("DiscussPost")
+    .update({ commentCount: value })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.log("Error updating data:", error);
+    throw error;
+  }
+
+  return data;
 }

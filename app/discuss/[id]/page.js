@@ -25,7 +25,7 @@ async function page({ params }) {
         <div className="row">
           <div className="col-8">
             <h6>
-              <b className="square"></b> <i>30</i> comments
+              <b className="square"></b> <i>{post.commentCount}</i> comments
             </h6>
           </div>
           {/* <div className="col-4 text-right">

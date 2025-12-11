@@ -20,12 +20,12 @@ async function PostItem({ post }) {
           <Link href={`/discuss/${post.id}`}>{post.title}</Link>
         </h6>
         <div className="text-muted font-size-12">
-          <u className="mr-3">{users[0].name + " (" + users[0].email + ")"}</u>{" "}
-          published at <b>{new Date(post.created_at).toLocaleDateString()}</b>
+          <u className="mr-3">{users[0].name}</u>published at{" "}
+          <b>{new Date(post.created_at).toLocaleDateString()}</b>
           <ul className="d-inline float-right">
             <li className="d-inline ml-2">like (11)</li>
             <li className="d-inline ml-2">|</li>
-            <li className="d-inline ml-2">replies (7)</li>
+            <li className="d-inline ml-2">replies ({post.commentCount})</li>
           </ul>
         </div>
       </div>

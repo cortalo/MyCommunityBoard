@@ -50,7 +50,7 @@ function PostContent({ user, post }) {
               <li className="d-inline ml-2">|</li>
               <li className="d-inline ml-2">
                 <a href="#replyform" className="text-primary">
-                  comment 7
+                  comment {post.commentCount}
                 </a>
               </li>
             </ul>
