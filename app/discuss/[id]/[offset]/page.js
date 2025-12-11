@@ -8,12 +8,12 @@ import { getCommenttCount } from "@/app/_lib/CommentMapper";
 import Pagination from "@/app/_components/Pagination";
 
 async function page({ params }) {
-  let { id } = await params;
+  let { id, offset } = await params;
+  let commentCount = await getCommenttCount(id);
   let post = await selectDiscussPostById(id);
   let user = await selectUserById(post.userId);
   const session = await auth();
   const userEmail = session?.user?.email;
-  const commentCount = await getCommenttCount(id);
 
   return (
     <div className="main">
@@ -36,16 +36,15 @@ async function page({ params }) {
         </div>
 
         {/* comment list */}
-        <PostReplys id={id} offset={0} limit={5} />
+        <PostReplys id={id} offset={offset * 5} limit={5} />
       </div>
       {/* comment enter box */}
       <PublishComment postId={id} userEmail={userEmail} targetId={user[0].id} />
-
       <Pagination
         path={`/discuss/${id}`}
         postCount={commentCount}
         limit={5}
-        current={0}
+        current={offset}
       />
     </div>
   );

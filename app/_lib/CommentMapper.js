@@ -73,3 +73,25 @@ export async function addComment(formData) {
 
   return { success: true, data };
 }
+
+/**
+ * Get the total count of comment for a post
+ * @param {number} postId -
+ * @return {Promise<number>} total number of discussPosts
+ */
+export async function getCommenttCount(postId) {
+  let query = supabase
+    .from("Comment")
+    .select("*", { count: "exact", head: true });
+  query = query.eq("entityType", 0);
+  query = query.eq("entityId", postId);
+
+  const { count, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Comment count cannot be loaded");
+  }
+
+  return count;
+}
