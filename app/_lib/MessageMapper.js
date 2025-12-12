@@ -86,3 +86,19 @@ export async function createMessage(formData) {
   revalidatePath(`/letter/detail/${conversationId}`);
   return { success: true, data };
 }
+
+export async function getConversationCount(conversationId) {
+  let query = supabase
+    .from("Message")
+    .select("*", { count: "exact", head: true });
+  query = query.eq("conversationId", conversationId);
+
+  const { count, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Conversation count cannot be loaded");
+  }
+
+  return count;
+}

@@ -18,14 +18,18 @@ async function page({ params }) {
   const user = await selectUserByEmail(session.user.email);
   const userId = user[0].id;
 
-  const { conversationId } = await params;
+  const { conversationId, offset } = await params;
   const ids = conversationId.split("_");
   const id1 = parseInt(ids[0]);
   const id2 = parseInt(ids[1]);
   if (id1 !== userId && id2 !== userId) {
     redirect("/");
   }
-  const conversations = await selectByConversationId(conversationId, 0, 5);
+  const conversations = await selectByConversationId(
+    conversationId,
+    5 * offset,
+    5
+  );
   const otherUser = await selectUserById(userId === id1 ? id2 : id1);
   const conversationCount = await getConversationCount(conversationId);
 
@@ -70,7 +74,7 @@ async function page({ params }) {
         path={`/letter/detail/${conversationId}`}
         postCount={conversationCount}
         limit={5}
-        current={0}
+        current={offset}
       />
     </div>
   );
