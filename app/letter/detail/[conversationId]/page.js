@@ -1,4 +1,5 @@
 import ConversationItem from "@/app/_components/ConversationItem";
+import PublishConversation from "@/app/_components/PublishConversation";
 import { auth } from "@/app/_lib/auth";
 import { selectByConversationId } from "@/app/_lib/MessageMapper";
 import { selectUserByEmail, selectUserById } from "@/app/_lib/UserMapper";
@@ -26,97 +27,7 @@ async function page({ params }) {
   return (
     <div className="main">
       <div className="container">
-        <div className="row">
-          <div className="col-8">
-            <h6>
-              <b className="square"></b> Private Messages from{" "}
-              <i className="text-success">{otherUser[0].name}</i>
-            </h6>
-          </div>
-          <div className="col-4 text-right">
-            <Link
-              type="button"
-              className="btn btn-secondary btn-sm"
-              href={"/letter"}
-            >
-              back
-            </Link>
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              data-toggle="modal"
-              data-target="#sendModal"
-            >
-              Send PM
-            </button>
-          </div>
-        </div>
-
-        {/* popup window */}
-        <div
-          className="modal fade"
-          id="sendModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-lg" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Send PM
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <div className="form-group">
-                    <label htmlFor="recipient-name" className="col-form-label">
-                      To:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="recipient-name"
-                      defaultValue="username"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="message-text" className="col-form-label">
-                      Content:
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="message-text"
-                      rows="10"
-                    ></textarea>
-                  </div>
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button type="button" className="btn btn-primary" id="sendBtn">
-                  Send
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <PublishConversation otherUser={otherUser} />
         {/* Prompt window */}
         <div
           className="modal fade"
