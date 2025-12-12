@@ -21,3 +21,19 @@ export async function selectConversations(userId, offset, limit) {
 
   return data;
 }
+
+export async function selectByConversationId(conversationId, offset, limit) {
+  let query = supabase.from("Message").select("*");
+  query = query.eq("conversationId", conversationId);
+  query = query.order("id", { ascending: false });
+  query = query.range(offset, offset + limit - 1);
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Message cannot be loaded");
+  }
+
+  return data;
+}

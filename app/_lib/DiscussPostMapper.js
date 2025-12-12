@@ -18,7 +18,7 @@ export async function selectDiscussPosts(userId, offset, limit) {
   if (userId !== 0) {
     query = query.eq("user_id", userId); // Use 'userId' if that's your column name
   }
-  query.order("id", { ascending: false });
+  query = query.order("id", { ascending: false });
 
   // Apply pagination with offset and limit
   query = query.range(offset, offset + limit - 1);

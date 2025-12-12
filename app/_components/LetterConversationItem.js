@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { selectUserById } from "../_lib/UserMapper";
+import Link from "next/link";
 
 async function LetterConversationItem({ conversation, user }) {
   const targetId =
@@ -26,7 +27,9 @@ async function LetterConversationItem({ conversation, user }) {
           </span>
         </h6>
         <div>
-          <a href="letter-detail.html">{conversation.content}</a>
+          <Link href={`/letter/detail/${conversation.conversationId}`}>
+            {conversation.content}
+          </Link>
           <ul className="d-inline font-size-12 float-right">
             <li className="d-inline ml-2">
               <a href="#" className="text-primary">
