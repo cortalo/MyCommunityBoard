@@ -1,7 +1,30 @@
+import { EntityType } from "@/lib/constants";
+import LikeButton from "./LikeButton";
 import styles from "./PostContent.module.css";
 import Image from "next/image";
+import { auth } from "../_lib/auth";
+import { selectUserByEmail } from "../_lib/UserMapper";
+import { LikeService } from "@/lib/likeService";
 
-function PostContent({ user, post }) {
+async function PostContent({ user, post }) {
+  let userId = 0;
+  const session = await auth();
+  if (session?.user?.email) {
+    const loginUser = await selectUserByEmail(session.user.email);
+    userId = loginUser[0].id;
+  }
+  const likeCount = await LikeService.findEntityLikeCount(
+    EntityType.POST,
+    post.id
+  );
+  const likeStatus =
+    userId === 0
+      ? 0
+      : await LikeService.findEntityLikeStatus(
+          userId,
+          EntityType.POST,
+          post.id
+        );
   return (
     <div className="container">
       {/* title */}
@@ -43,16 +66,20 @@ function PostContent({ user, post }) {
             published at <b>{new Date(post.created_at).toLocaleDateString()}</b>
             <ul className="d-inline float-right">
               <li className="d-inline ml-2">
-                <a href="#" className="text-primary">
-                  like 11
-                </a>
+                <LikeButton
+                  entityType={EntityType.POST}
+                  entityId={post.id}
+                  userId={userId}
+                  initialLikeCount={likeCount}
+                  initialLikeStatus={likeStatus}
+                />
               </li>
-              <li className="d-inline ml-2">|</li>
+              {/* <li className="d-inline ml-2">|</li>
               <li className="d-inline ml-2">
-                <a href="#replyform" className="text-primary">
+                <span href="#replyform" className="text-primary">
                   comment {post.commentCount}
-                </a>
-              </li>
+                </span>
+              </li> */}
             </ul>
           </div>
         </div>

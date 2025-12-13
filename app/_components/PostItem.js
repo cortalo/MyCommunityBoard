@@ -1,9 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { selectUserById } from "../_lib/UserMapper";
+import { LikeService } from "@/lib/likeService";
+import { EntityType } from "@/lib/constants";
 
 async function PostItem({ post }) {
   let users = await selectUserById(post.userId);
+  const likeCount = await LikeService.findEntityLikeCount(
+    EntityType.POST,
+    post.id
+  );
   return (
     <li className="media pb-3 pt-3 mb-3 border-bottom">
       <Link href="/">
@@ -23,7 +29,7 @@ async function PostItem({ post }) {
           <u className="mr-3">{users[0].name}</u>published at{" "}
           <b>{new Date(post.created_at).toLocaleDateString()}</b>
           <ul className="d-inline float-right">
-            <li className="d-inline ml-2">like (11)</li>
+            <li className="d-inline ml-2">like ({likeCount})</li>
             <li className="d-inline ml-2">|</li>
             <li className="d-inline ml-2">replies ({post.commentCount})</li>
           </ul>
