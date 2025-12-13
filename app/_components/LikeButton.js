@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toggleLike } from "../_lib/LikeAction";
 
 function LikeButton({
   entityType,
@@ -14,26 +15,13 @@ function LikeButton({
   const [loading, setLoading] = useState(false);
 
   const handleLike = async () => {
-    if (loading) return;
-
     setLoading(true);
-    try {
-      const response = await fetch("/api/like", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ entityType, entityId, userId }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setIsLiked(data.isLiked);
-        setLikeCount(data.likeCount);
-      }
-    } catch (error) {
-      console.log("Failed to like: ", error);
-    } finally {
-      setLoading(false);
+    const result = await toggleLike(entityType, entityId);
+    if (result.success) {
+      setIsLiked(result.isLiked);
+      setLikeCount(result.likeCount);
     }
+    setLoading(false);
   };
 
   return (
