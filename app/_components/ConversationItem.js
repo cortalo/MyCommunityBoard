@@ -1,8 +1,12 @@
 import Image from "next/image";
 import { selectUserById } from "../_lib/UserMapper";
+import { readConversation } from "../_lib/MessageMapper";
 
-async function ConversationItem({ conversation }) {
+async function ConversationItem({ conversation, userId }) {
   const fromUser = await selectUserById(conversation.fromId);
+  if (userId !== fromUser[0].id && conversation.status !== 1) {
+    const tmpData = await readConversation(conversation.id);
+  }
   return (
     <li className="media pb-3 pt-3 mb-2">
       <a href="profile.html">

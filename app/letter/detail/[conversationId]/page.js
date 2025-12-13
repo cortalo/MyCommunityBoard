@@ -62,6 +62,7 @@ async function page({ params }) {
             <ConversationItem
               conversation={conversation}
               key={conversation.id}
+              userId={userId}
             />
           ))}
         </ul>

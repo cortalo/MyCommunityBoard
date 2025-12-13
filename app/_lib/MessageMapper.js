@@ -75,6 +75,7 @@ export async function createMessage(formData) {
         toId: toUser[0].id,
         conversationId,
         content,
+        status: 0,
       },
     ])
     .select();
@@ -101,4 +102,37 @@ export async function getConversationCount(conversationId) {
   }
 
   return count;
+}
+
+export async function getConversationUnreadCount(conversationId, fromId) {
+  let query = supabase
+    .from("Message")
+    .select("*", { count: "exact", head: true });
+  query = query.eq("conversationId", conversationId);
+  query = query.eq("fromId", fromId);
+  query = query.eq("status", 0);
+
+  const { count, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Conversation count cannot be loaded");
+  }
+
+  return count;
+}
+
+export async function readConversation(id) {
+  const { data, error } = await supabase
+    .from("Message")
+    .update({ status: 1 })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.log("Error updating data:", error);
+    throw error;
+  }
+
+  return data;
 }

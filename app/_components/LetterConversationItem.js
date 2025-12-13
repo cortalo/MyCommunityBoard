@@ -1,15 +1,28 @@
 import Image from "next/image";
 import { selectUserById } from "../_lib/UserMapper";
 import Link from "next/link";
+import {
+  getConversationCount,
+  getConversationUnreadCount,
+} from "../_lib/MessageMapper";
 
 async function LetterConversationItem({ conversation, user }) {
   const targetId =
     user.id == conversation.fromId ? conversation.toId : conversation.fromId;
 
   const targetUser = await selectUserById(targetId);
+  const conversationCount = await getConversationCount(
+    conversation.conversationId
+  );
+  const conversationUnreadCount = await getConversationUnreadCount(
+    conversation.conversationId,
+    targetId
+  );
   return (
     <li className="media pb-3 pt-3 mb-3 border-bottom position-relative">
-      <span className="badge badge-danger">3</span>
+      {conversationUnreadCount > 0 && (
+        <span className="badge badge-danger">{conversationUnreadCount}</span>
+      )}
       <a href="profile.html">
         <Image
           src={targetUser[0].image}
@@ -33,7 +46,7 @@ async function LetterConversationItem({ conversation, user }) {
           <ul className="d-inline font-size-12 float-right">
             <li className="d-inline ml-2">
               <a href="#" className="text-primary">
-                <i>10</i> conversations in total
+                <i>{conversationCount}</i> conversations in total
               </a>
             </li>
           </ul>
