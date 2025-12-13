@@ -8,6 +8,7 @@ import {
   updateUserImage,
   updateUserName,
 } from "./_lib/UserMapper";
+import { getConversationTotalUnreadCount } from "./_lib/MessageMapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,6 +27,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await auth();
+  let conversationTotalUnreadCount;
   if (session?.user?.email) {
     const user = await selectUserByEmail(session.user.email);
     if (user.length === 0) {
@@ -46,6 +48,9 @@ export default async function RootLayout({ children }) {
         updateUserImage("users", user[0].id, session.user.image);
       }
     }
+    conversationTotalUnreadCount = await getConversationTotalUnreadCount(
+      session.user.email
+    );
   }
   return (
     <html lang="en">
@@ -59,7 +64,10 @@ export default async function RootLayout({ children }) {
       <body>
         <div id="root">
           <div className="nk-container">
-            <Header session={session} />
+            <Header
+              session={session}
+              initialUnreadCount={conversationTotalUnreadCount}
+            />
             {children}
           </div>
         </div>

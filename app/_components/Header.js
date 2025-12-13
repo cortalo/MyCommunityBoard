@@ -1,10 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function Header({ session }) {
+function Header({ session, initialUnreadCount }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(initialUnreadCount || 0);
+
+  useEffect(() => {
+    if (!session?.user?.email) return;
+
+    const fetchUnreadCount = async () => {
+      const response = await fetch("/api/unread-count");
+      const data = await response.json();
+      setUnreadCount(data.count);
+    };
+
+    fetchUnreadCount();
+
+    const interval = setInterval(fetchUnreadCount, 30000);
+    return () => clearInterval(interval);
+  }, [session?.user?.email]);
+
   return (
     <header className="bg-dark sticky-top">
       <div className="container">
@@ -35,7 +52,10 @@ function Header({ session }) {
               {session && (
                 <li className="nav-item ml-3 btn-group-vertical">
                   <Link className="nav-link" href="/letter">
-                    Msgs<span className="badge badge-danger">12</span>
+                    Msgs
+                    {unreadCount > 0 && (
+                      <span className="badge badge-danger">{unreadCount}</span>
+                    )}
                   </Link>
                 </li>
               )}

@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import { auth } from "../_lib/auth";
-import { selectConversations } from "../_lib/MessageMapper";
+import {
+  getConversationTotalUnreadCount,
+  selectConversations,
+} from "../_lib/MessageMapper";
 import { selectUserByEmail } from "../_lib/UserMapper";
 import LetterConversationItem from "../_components/LetterConversationItem";
 
@@ -10,7 +13,10 @@ async function page() {
     redirect("/");
   }
   const user = await selectUserByEmail(session.user.email);
-  const conversations = selectConversations(user[0].id, 0, 10);
+  const conversations = await selectConversations(user[0].id, 0, 10);
+  const conversationTotalUnreadCount = await getConversationTotalUnreadCount(
+    user[0].email
+  );
   return (
     <>
       <style>{`
@@ -40,7 +46,11 @@ async function page() {
                   href="/letter/list"
                 >
                   Friends
-                  <span className={`badge badge-danger`}>3</span>
+                  {conversationTotalUnreadCount > 0 && (
+                    <span className={`badge badge-danger`}>
+                      {conversationTotalUnreadCount}
+                    </span>
+                  )}
                 </a>
               </li>
               <li className="nav-item">

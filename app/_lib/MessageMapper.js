@@ -122,6 +122,25 @@ export async function getConversationUnreadCount(conversationId, fromId) {
   return count;
 }
 
+export async function getConversationTotalUnreadCount(userEmail) {
+  const user = await selectUserByEmail(userEmail);
+  let query = supabase
+    .from("Message")
+    .select("*", { count: "exact", head: true });
+  query = query.neq("fromId", 1);
+  query = query.neq("fromId", user[0].id);
+  query = query.eq("status", 0);
+
+  const { count, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Conversation count cannot be loaded");
+  }
+
+  return count;
+}
+
 export async function readConversation(id) {
   const { data, error } = await supabase
     .from("Message")
