@@ -1,8 +1,29 @@
+import { LikeService } from "@/lib/likeService";
+import { auth } from "../_lib/auth";
 import { selectUserById } from "../_lib/UserMapper";
 import styles from "./CommentReply.module.css";
+import { EntityType } from "@/lib/constants";
+import LikeButton from "./LikeButton";
 
 async function CommentReply({ reply }) {
   const user = await selectUserById(reply.userId);
+  let loginUserId = 0;
+  const session = await auth();
+  if (session?.user?.id) {
+    loginUserId = session.user.id;
+  }
+  const likeCount = await LikeService.findEntityLikeCount(
+    EntityType.COMMENT,
+    reply.id
+  );
+  const likeStatus =
+    loginUserId === 0
+      ? 0
+      : await LikeService.findEntityLikeStatus(
+          loginUserId,
+          EntityType.COMMENT,
+          reply.id
+        );
   return (
     <li className="pb-3 pt-3 mb-3 border-bottom">
       <div>
@@ -15,9 +36,13 @@ async function CommentReply({ reply }) {
         <span>{new Date(reply.created_at).toLocaleDateString()}</span>
         <ul className="d-inline float-right">
           <li className="d-inline ml-2">
-            <a href="#" className="text-primary">
-              like(1)
-            </a>
+            <LikeButton
+              entityType={EntityType.COMMENT}
+              entityId={reply.id}
+              userId={loginUserId}
+              initialLikeCount={likeCount}
+              initialLikeStatus={likeStatus}
+            />
           </li>
           {/* <li className="d-inline ml-2">|</li>
           <li className="d-inline ml-2">

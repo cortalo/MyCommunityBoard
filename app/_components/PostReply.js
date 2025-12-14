@@ -5,13 +5,31 @@ import CommentReply from "./CommentReply";
 import { getReplyCount, selectCommentReplys } from "../_lib/CommentMapper";
 import PublishReply from "./PublishReply";
 import { auth } from "../_lib/auth";
+import LikeButton from "./LikeButton";
+import { LikeService } from "@/lib/likeService";
+import { EntityType } from "@/lib/constants";
 
 async function PostReply({ postComment, index }) {
   const user = await selectUserById(postComment.userId);
   const replyCount = await getReplyCount(postComment.id);
   const replys = await selectCommentReplys(postComment.id);
   const session = await auth();
-  const userEmail = session?.user?.email;
+  let userId = 0;
+  if (session?.user?.id) {
+    userId = session.user.id;
+  }
+  const likeCount = await LikeService.findEntityLikeCount(
+    EntityType.COMMENT,
+    postComment.id
+  );
+  const likeStatus =
+    userId === 0
+      ? 0
+      : await LikeService.findEntityLikeStatus(
+          userId,
+          EntityType.COMMENT,
+          postComment.id
+        );
 
   return (
     <li className="media pb-3 pt-3 mb-3 border-bottom">
@@ -39,16 +57,20 @@ async function PostReply({ postComment, index }) {
           </span>
           <ul className="d-inline float-right">
             <li className="d-inline ml-2">
-              <a href="#" className="text-primary">
-                like(1)
-              </a>
+              <LikeButton
+                entityType={EntityType.COMMENT}
+                entityId={postComment.id}
+                userId={userId}
+                initialLikeCount={likeCount}
+                initialLikeStatus={likeStatus}
+              />
             </li>
-            <li className="d-inline ml-2">|</li>
+            {/* <li className="d-inline ml-2">|</li>
             <li className="d-inline ml-2">
               <a href="#" className="text-primary">
                 comment({replyCount})
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
 
@@ -61,7 +83,7 @@ async function PostReply({ postComment, index }) {
           <PublishReply
             commentId={postComment.id}
             postId={postComment.entityId}
-            userEmail={userEmail}
+            userId={userId}
             targetId={user[0].id}
           />
         </ul>

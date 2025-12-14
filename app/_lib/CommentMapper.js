@@ -37,7 +37,7 @@ export async function selectCommentReplys(commentId) {
 export async function addComment(formData) {
   const session = await auth();
 
-  if (!session || session.user.email != formData.get("userEmail")) {
+  if (!session || session.user.id != formData.get("userId")) {
     return { error: "Unauthorized" };
   }
 

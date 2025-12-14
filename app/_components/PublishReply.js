@@ -4,8 +4,8 @@ import { useState } from "react";
 import styles from "./PublishComment.module.css";
 import { addComment } from "../_lib/CommentMapper";
 
-function PublishReply({ commentId, postId, userEmail, targetId }) {
-  const login = userEmail ? true : false;
+function PublishReply({ commentId, postId, userId, targetId }) {
+  const login = userId === 0 ? false : true;
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,7 +17,7 @@ function PublishReply({ commentId, postId, userEmail, targetId }) {
 
     const formData = new FormData();
     formData.append("postId", postId);
-    formData.append("userEmail", userEmail);
+    formData.append("userId", Id);
     formData.append("entityType", 1);
     formData.append("entityId", commentId);
     formData.append("targetId", targetId);
