@@ -4,7 +4,6 @@ import {
   getConversationTotalUnreadCount,
   selectConversations,
 } from "../_lib/MessageMapper";
-import { selectUserByEmail } from "../_lib/UserMapper";
 import LetterConversationItem from "../_components/LetterConversationItem";
 
 async function page() {
@@ -12,10 +11,10 @@ async function page() {
   if (!session) {
     redirect("/");
   }
-  const user = await selectUserByEmail(session.user.email);
-  const conversations = await selectConversations(user[0].id, 0, 10);
+  const userId = session.user.id;
+  const conversations = await selectConversations(userId, 0, 10);
   const conversationTotalUnreadCount = await getConversationTotalUnreadCount(
-    user[0].email
+    userId
   );
   return (
     <>
@@ -169,7 +168,7 @@ async function page() {
             {(await conversations).map((convsersation) => (
               <LetterConversationItem
                 conversation={convsersation}
-                user={user[0]}
+                userId={userId}
                 key={convsersation.id}
               />
             ))}

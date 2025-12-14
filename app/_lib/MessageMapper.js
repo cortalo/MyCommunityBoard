@@ -50,7 +50,7 @@ export async function createMessage(formData) {
     return { error: "Unauthorized" };
   }
 
-  const fromUser = await selectUserByEmail(session.user.email);
+  const fromUserId = session.user.id;
   const toUser = await selectUserByEmail(formData.get("toEmail"));
   const content = formData.get("content");
 
@@ -62,16 +62,16 @@ export async function createMessage(formData) {
   }
 
   const conversationId =
-    fromUser[0].id < toUser[0].id
-      ? `${fromUser[0].id}_${toUser[0].id}`
-      : `${toUser[0].id}_${fromUser[0].id}`;
+    fromUserId < toUser[0].id
+      ? `${fromUserId}_${toUser[0].id}`
+      : `${toUser[0].id}_${fromUserId}`;
 
   const { data, error } = await supabase
     .from("Message")
     .insert([
       {
         created_at: new Date().toISOString(),
-        fromId: fromUser[0].id,
+        fromId: fromUserId,
         toId: toUser[0].id,
         conversationId,
         content,
@@ -122,13 +122,12 @@ export async function getConversationUnreadCount(conversationId, fromId) {
   return count;
 }
 
-export async function getConversationTotalUnreadCount(userEmail) {
-  const user = await selectUserByEmail(userEmail);
+export async function getConversationTotalUnreadCount(userId) {
   let query = supabase
     .from("Message")
     .select("*", { count: "exact", head: true });
   query = query.neq("fromId", 1);
-  query = query.neq("fromId", user[0].id);
+  query = query.neq("fromId", userId);
   query = query.eq("status", 0);
 
   const { count, error } = await query;

@@ -2,7 +2,6 @@
 import { revalidatePath } from "next/cache";
 import supabase from "./supabase";
 import { auth } from "./auth";
-import { selectUserByEmail } from "./UserMapper";
 
 /**
  * Select DiscussPosts from database
@@ -86,15 +85,13 @@ export async function createPost(formData) {
     return { error: "Title and content are required" };
   }
 
-  const user = await selectUserByEmail(session.user.email);
-
   const { data, error } = await supabase
     .from("DiscussPost")
     .insert([
       {
         title,
         content,
-        userId: user[0].id, // or however you store user ID
+        userId: session.user.id, // or however you store user ID
         created_at: new Date().toISOString(),
       },
     ])

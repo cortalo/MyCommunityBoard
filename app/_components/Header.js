@@ -6,9 +6,9 @@ import NavbarContent from "./NavbarContent";
 async function Header() {
   const session = await auth();
   let conversationTotalUnreadCount = 0;
-  if (session?.user?.email) {
+  if (session?.user?.id) {
     conversationTotalUnreadCount = await getConversationTotalUnreadCount(
-      session.user.email
+      session.user.id
     );
   }
   return (

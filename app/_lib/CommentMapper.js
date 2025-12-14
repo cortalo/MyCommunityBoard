@@ -2,7 +2,6 @@
 import { revalidatePath } from "next/cache";
 import supabase from "./supabase";
 import { auth } from "./auth";
-import { selectUserByEmail } from "./UserMapper";
 import { updatePostCommentCount } from "./DiscussPostMapper";
 
 export async function selectPostComments(postId, offset, limit) {
@@ -49,8 +48,6 @@ export async function addComment(formData) {
     return { error: "Content are required" };
   }
 
-  const user = await selectUserByEmail(session.user.email);
-
   const { data, error } = await supabase
     .from("Comment")
     .insert([
@@ -60,7 +57,7 @@ export async function addComment(formData) {
         targetId: formData.get("targetId"),
         content,
         status: formData.get("status"),
-        userId: user[0].id, // or however you store user ID
+        userId: session.user.id, // or however you store user ID
         created_at: new Date().toISOString(),
       },
     ])

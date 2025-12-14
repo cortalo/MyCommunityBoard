@@ -3,15 +3,13 @@ import LikeButton from "./LikeButton";
 import styles from "./PostContent.module.css";
 import Image from "next/image";
 import { auth } from "../_lib/auth";
-import { selectUserByEmail } from "../_lib/UserMapper";
 import { LikeService } from "@/lib/likeService";
 
 async function PostContent({ user, post }) {
   let userId = 0;
   const session = await auth();
-  if (session?.user?.email) {
-    const loginUser = await selectUserByEmail(session.user.email);
-    userId = loginUser[0].id;
+  if (session?.user?.id) {
+    userId = session.user.id;
   }
   const likeCount = await LikeService.findEntityLikeCount(
     EntityType.POST,

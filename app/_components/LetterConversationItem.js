@@ -6,9 +6,9 @@ import {
   getConversationUnreadCount,
 } from "../_lib/MessageMapper";
 
-async function LetterConversationItem({ conversation, user }) {
+async function LetterConversationItem({ conversation, userId }) {
   const targetId =
-    user.id == conversation.fromId ? conversation.toId : conversation.fromId;
+    userId === conversation.fromId ? conversation.toId : conversation.fromId;
 
   const targetUser = await selectUserById(targetId);
   const conversationCount = await getConversationCount(

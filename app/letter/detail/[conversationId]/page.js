@@ -6,8 +6,7 @@ import {
   getConversationCount,
   selectByConversationId,
 } from "@/app/_lib/MessageMapper";
-import { selectUserByEmail, selectUserById } from "@/app/_lib/UserMapper";
-import Link from "next/link";
+import { selectUserById } from "@/app/_lib/UserMapper";
 import { redirect } from "next/navigation";
 
 async function page({ params }) {
@@ -15,8 +14,7 @@ async function page({ params }) {
   if (!session) {
     redirect("/");
   }
-  const user = await selectUserByEmail(session.user.email);
-  const userId = user[0].id;
+  const userId = session.user.id;
 
   const { conversationId } = await params;
   const ids = conversationId.split("_");
