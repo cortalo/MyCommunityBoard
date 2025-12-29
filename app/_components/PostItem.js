@@ -12,7 +12,7 @@ async function PostItem({ post }) {
   );
   return (
     <li className="media pb-3 pt-3 mb-3 border-bottom">
-      <Link href="/">
+      <Link href={`/profile/${users[0].id}`}>
         <Image
           src={users[0].image}
           className="mr-4 rounded-circle"

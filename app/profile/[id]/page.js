@@ -1,13 +1,34 @@
+import FollowButton from "@/app/_components/FollowButton";
+import { auth } from "@/app/_lib/auth";
 import { selectUserById } from "@/app/_lib/UserMapper";
+import { EntityType } from "@/lib/constants";
+import { FollowService } from "@/lib/followService";
 import { LikeService } from "@/lib/likeService";
 import Image from "next/image";
 import Link from "next/link";
 
 async function page({ params }) {
   const { id } = await params;
+  const session = await auth();
   const user = await selectUserById(id);
   const likeCount = await LikeService.findUserLikeCount(user[0].id);
+  const followeeCount = await FollowService.findFolloweeCount(
+    user[0].id,
+    EntityType.USER
+  );
+  const followerCount = await FollowService.findFollowerCount(
+    EntityType.USER,
+    user[0].id
+  );
 
+  let followStatus = false;
+  if (session) {
+    followStatus = await FollowService.hasFollowed(
+      session.user.id,
+      EntityType.USER,
+      id
+    );
+  }
   return (
     <div className="main">
       <div className="container">
@@ -44,12 +65,13 @@ async function page({ params }) {
           <div className="media-body">
             <h5 className="mt-0 text-warning">
               <span>{user[0].name}</span>
-              <button
-                type="button"
-                className="btn btn-info btn-sm float-right mr-5 follow-btn"
-              >
-                follow
-              </button>
+              {session && session?.user?.id != id && (
+                <FollowButton
+                  initialStatus={followStatus}
+                  entityType={EntityType.USER}
+                  entityId={id}
+                />
+              )}
             </h5>
             <div className="text-muted mt-3">
               <span>
@@ -63,13 +85,13 @@ async function page({ params }) {
               <span>
                 Followee:{" "}
                 <a className="text-primary" href="followee.html">
-                  5
+                  {followeeCount}
                 </a>
               </span>
               <span className="ml-4">
                 Follower:{" "}
                 <a className="text-primary" href="follower.html">
-                  123
+                  {followerCount}
                 </a>
               </span>
               <span className="ml-4">
