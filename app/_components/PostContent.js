@@ -70,6 +70,7 @@ async function PostContent({ user, post }) {
                   userId={userId}
                   initialLikeCount={likeCount}
                   initialLikeStatus={likeStatus}
+                  entityUserId={post.userId}
                 />
               </li>
               {/* <li className="d-inline ml-2">|</li>

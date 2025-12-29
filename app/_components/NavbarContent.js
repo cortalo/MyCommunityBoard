@@ -49,7 +49,7 @@ function NavbarContent({ session, unreadCount }) {
           )}
           {session && (
             <li className="nav-item ml-3 btn-group-vertical">
-              <Link className="nav-link" href="/">
+              <Link className="nav-link" href={`/profile/${session.user.id}`}>
                 {session.user.name}
               </Link>
             </li>

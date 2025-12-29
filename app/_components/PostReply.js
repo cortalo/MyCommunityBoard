@@ -63,6 +63,7 @@ async function PostReply({ postComment, index }) {
                 userId={userId}
                 initialLikeCount={likeCount}
                 initialLikeStatus={likeStatus}
+                entityUserId={postComment.userId}
               />
             </li>
             {/* <li className="d-inline ml-2">|</li>

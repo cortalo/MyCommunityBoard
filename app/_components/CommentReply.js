@@ -42,6 +42,7 @@ async function CommentReply({ reply }) {
               userId={loginUserId}
               initialLikeCount={likeCount}
               initialLikeStatus={likeStatus}
+              entityUserId={reply.userId}
             />
           </li>
           {/* <li className="d-inline ml-2">|</li>

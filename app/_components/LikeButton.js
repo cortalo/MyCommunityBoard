@@ -9,6 +9,7 @@ function LikeButton({
   userId,
   initialLikeCount,
   initialLikeStatus,
+  entityUserId,
 }) {
   const [likeCount, setLikeCount] = useState(initialLikeCount || 0);
   const [isLiked, setIsLiked] = useState(initialLikeStatus === 1);
@@ -16,7 +17,7 @@ function LikeButton({
 
   const handleLike = async () => {
     setLoading(true);
-    const result = await toggleLike(entityType, entityId);
+    const result = await toggleLike(entityType, entityId, entityUserId);
     if (result.success) {
       setIsLiked(result.isLiked);
       setLikeCount(result.likeCount);
