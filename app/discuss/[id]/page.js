@@ -12,7 +12,6 @@ async function page({ params }) {
   let post = await selectDiscussPostById(id);
   let user = await selectUserById(post.userId);
   const session = await auth();
-  const userEmail = session?.user?.email;
   const commentCount = await getCommenttCount(id);
 
   return (
@@ -39,7 +38,7 @@ async function page({ params }) {
         <PostReplys id={id} offset={0} limit={5} />
       </div>
       {/* comment enter box */}
-      <PublishComment postId={id} userEmail={userEmail} targetId={user[0].id} />
+      <PublishComment postId={id} session={session} targetId={user[0].id} />
 
       <Pagination
         path={`/discuss/${id}`}

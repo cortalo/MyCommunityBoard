@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "./PublishComment.module.css";
 import { addComment } from "../_lib/CommentMapper";
+import { EntityType } from "@/lib/constants";
 
 function PublishReply({ commentId, postId, userId, targetId }) {
   const login = userId === 0 ? false : true;
@@ -17,8 +18,7 @@ function PublishReply({ commentId, postId, userId, targetId }) {
 
     const formData = new FormData();
     formData.append("postId", postId);
-    formData.append("userId", Id);
-    formData.append("entityType", 1);
+    formData.append("entityType", EntityType.COMMENT);
     formData.append("entityId", commentId);
     formData.append("targetId", targetId);
     formData.append("content", content);

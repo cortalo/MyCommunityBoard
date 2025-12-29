@@ -2,10 +2,18 @@
 import { revalidatePath } from "next/cache";
 import supabase from "./supabase";
 import { auth } from "./auth";
-import { updatePostCommentCount } from "./DiscussPostMapper";
+import {
+  selectDiscussPostById,
+  updatePostCommentCount,
+} from "./DiscussPostMapper";
+import { EntityType, Topic } from "@/lib/constants";
+import { EventProducer } from "@/lib/eventProducer";
 
 export async function selectPostComments(postId, offset, limit) {
-  let query = supabase.from("Comment").select("*").eq("entityType", 0);
+  let query = supabase
+    .from("Comment")
+    .select("*")
+    .eq("entityType", EntityType.POST);
   query = query.eq("entityId", postId);
   query = query.order("id", { ascending: true });
   query.range(offset, offset + limit - 1);
@@ -21,7 +29,10 @@ export async function selectPostComments(postId, offset, limit) {
 }
 
 export async function selectCommentReplys(commentId) {
-  let query = supabase.from("Comment").select("*").eq("entityType", 1);
+  let query = supabase
+    .from("Comment")
+    .select("*")
+    .eq("entityType", EntityType.COMMENT);
   query = query.eq("entityId", commentId);
 
   const { data, error } = await query;
@@ -37,7 +48,7 @@ export async function selectCommentReplys(commentId) {
 export async function addComment(formData) {
   const session = await auth();
 
-  if (!session || session.user.id != formData.get("userId")) {
+  if (!session) {
     return { error: "Unauthorized" };
   }
 
@@ -67,7 +78,7 @@ export async function addComment(formData) {
     return { error: error.message };
   }
 
-  if (formData.get("entityType") == 0) {
+  if (formData.get("entityType") == EntityType.POST) {
     const commentCount = await getCommenttCount(formData.get("entityId"));
     const { data, error } = await updatePostCommentCount(
       formData.get("entityId"),
@@ -81,6 +92,18 @@ export async function addComment(formData) {
   // Refresh the page data
   revalidatePath("/discuss/" + formData.get("postId"));
 
+  // Fire event
+  const event = {
+    topic: Topic.COMMENT,
+    userId: session.user.id,
+    entityType: formData.get("entityType"),
+    entityId: formData.get("entityId"),
+    data: { postId: formData.get("postId") },
+    entityUserId: formData.get("targetId"),
+  };
+
+  await EventProducer.fireEvent(event);
+
   return { success: true, data };
 }
 
@@ -93,7 +116,7 @@ export async function getCommenttCount(postId) {
   let query = supabase
     .from("Comment")
     .select("*", { count: "exact", head: true });
-  query = query.eq("entityType", 0);
+  query = query.eq("entityType", EntityType.POST);
   query = query.eq("entityId", postId);
 
   const { count, error } = await query;
@@ -110,7 +133,7 @@ export async function getReplyCount(commentId) {
   let query = supabase
     .from("Comment")
     .select("*", { count: "exact", head: true });
-  query = query.eq("entityType", 1);
+  query = query.eq("entityType", EntityType.COMMENT);
   query = query.eq("entityId", commentId);
 
   const { count, error } = await query;

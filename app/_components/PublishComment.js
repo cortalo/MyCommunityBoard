@@ -3,8 +3,9 @@
 import { useState } from "react";
 import styles from "./PublishComment.module.css";
 import { addComment } from "../_lib/CommentMapper";
-function PublishComment({ postId, userEmail, targetId }) {
-  const login = userEmail ? true : false;
+import { EntityType } from "@/lib/constants";
+function PublishComment({ postId, session, targetId }) {
+  const login = session != null;
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,8 +17,7 @@ function PublishComment({ postId, userEmail, targetId }) {
 
     const formData = new FormData();
     formData.append("postId", targetId);
-    formData.append("userEmail", userEmail);
-    formData.append("entityType", 0);
+    formData.append("entityType", EntityType.POST);
     formData.append("entityId", postId);
     formData.append("targetId", targetId);
     formData.append("content", content);
@@ -39,7 +39,7 @@ function PublishComment({ postId, userEmail, targetId }) {
           <a name={styles.replyform}></a>
           <textarea
             placeholder={
-              userEmail
+              login
                 ? "Please enter your comment."
                 : "Login to comment the post."
             }

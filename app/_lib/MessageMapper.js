@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "./auth";
 import supabase from "./supabase";
 import { selectUserByEmail } from "./UserMapper";
+import { SYSTEM_USER_ID } from "@/lib/constants";
 
 /**
  * Select latest message from each conversation for a user
@@ -149,6 +150,36 @@ export async function readConversation(id) {
 
   if (error) {
     console.log("Error updating data:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function createSystemMessage(event) {
+  const content = {
+    userId: event.userId,
+    entityType: event.entityType,
+    entityId: event.entityId,
+    ...event.data, // includes postId, etc.
+  };
+
+  const { data, error } = await supabase
+    .from("Message")
+    .insert([
+      {
+        created_at: new Date().toISOString(),
+        fromId: SYSTEM_USER_ID,
+        toId: event.entityUserId,
+        conversationId: event.topic, // "comment", "like", or "follow"
+        content: JSON.stringify(content),
+        status: 0,
+      },
+    ])
+    .select();
+
+  if (error) {
+    console.error("Failed to create system message:", error);
     throw error;
   }
 
