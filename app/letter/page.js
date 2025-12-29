@@ -2,9 +2,11 @@ import { redirect } from "next/navigation";
 import { auth } from "../_lib/auth";
 import {
   getConversationTotalUnreadCount,
+  getNoticeTotalUnreadCount,
   selectConversations,
 } from "../_lib/MessageMapper";
 import LetterConversationItem from "../_components/LetterConversationItem";
+import Link from "next/link";
 
 async function page() {
   const session = await auth();
@@ -16,6 +18,7 @@ async function page() {
   const conversationTotalUnreadCount = await getConversationTotalUnreadCount(
     userId
   );
+  const noticeTotalUnreadCount = await getNoticeTotalUnreadCount(userId);
   return (
     <>
       <style>{`
@@ -40,9 +43,9 @@ async function page() {
             {/* options */}
             <ul className={`nav nav-tabs mb-3`}>
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link position-relative active"
-                  href="/letter/list"
+                  href="/letter"
                 >
                   Friends
                   {conversationTotalUnreadCount > 0 && (
@@ -50,13 +53,17 @@ async function page() {
                       {conversationTotalUnreadCount}
                     </span>
                   )}
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link position-relative" href="notice.html">
-                  System
-                  <span className={`badge badge-danger`}>3</span>
-                </a>
+                <Link className="nav-link position-relative" href="/notice">
+                  Notices
+                  {noticeTotalUnreadCount > 0 && (
+                    <span className={`badge badge-danger`}>
+                      {noticeTotalUnreadCount}
+                    </span>
+                  )}
+                </Link>
               </li>
             </ul>
             <button

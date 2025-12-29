@@ -123,11 +123,47 @@ export async function getConversationUnreadCount(conversationId, fromId) {
   return count;
 }
 
+export async function getMessageTotalUnreadCount(userId) {
+  let query = supabase
+    .from("Message")
+    .select("*", { count: "exact", head: true });
+  // query = query.neq("fromId", 1);
+  query = query.neq("fromId", userId);
+  query = query.eq("status", 0);
+
+  const { count, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Conversation count cannot be loaded");
+  }
+
+  return count;
+}
+
 export async function getConversationTotalUnreadCount(userId) {
   let query = supabase
     .from("Message")
     .select("*", { count: "exact", head: true });
   query = query.neq("fromId", 1);
+  query = query.neq("fromId", userId);
+  query = query.eq("status", 0);
+
+  const { count, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error("Conversation count cannot be loaded");
+  }
+
+  return count;
+}
+
+export async function getNoticeTotalUnreadCount(userId) {
+  let query = supabase
+    .from("Message")
+    .select("*", { count: "exact", head: true });
+  query = query.eq("fromId", 1);
   query = query.neq("fromId", userId);
   query = query.eq("status", 0);
 
