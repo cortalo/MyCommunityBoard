@@ -30,6 +30,16 @@ function NavbarContent({ session, unreadCount }) {
               Home
             </Link>
           </li>
+          <li className="nav-item ml-3 btn-group-vertical">
+            <a
+              className="nav-link"
+              href="https://github.com/cortalo/MyCommunityBoard"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+          </li>
           {session && (
             <li className="nav-item ml-3 btn-group-vertical">
               <Link className="nav-link" href="/letter">
