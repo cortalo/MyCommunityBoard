@@ -1,119 +1,46 @@
-# MyCommunityBoard
+# MyCommunityForum
 
-A full-stack community forum and discussion platform built with modern web technologies. This application enables users to create discussion posts, engage through comments and replies, interact via likes and follows, and communicate privately through direct messaging.
+A simple community forum application built with Next.js. Users can create discussion posts, comment on posts, like content, follow other users, and send private messages.
 
-## Table of Contents
-
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Architecture](#architecture)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Project Structure](#project-structure)
-- [API Endpoints](#api-endpoints)
-- [Database Schema](#database-schema)
+**Live Demo:** [my-forum-phi.vercel.app](https://my-forum-phi.vercel.app)
 
 ## Features
 
-### Discussion Posts
-- Create and browse discussion posts with full-text content
-- Paginated post listing with metadata display (author, creation date, comment count, like count)
-- Author profile linking with user information
-
-### Comments and Replies
-- Comment on discussion posts
-- Reply to comments with nested reply support
-- Two-tier comment system for organized discussions
-- Real-time comment counting and tracking
-
-### Like System
-- Like/unlike functionality for posts and comments
-- Real-time like counting with optimistic UI updates
-- User-level aggregation tracking total likes received
-- Redis-backed implementation for high performance
-
-### Follow System
-- Follow/unfollow users
-- Follower and followee counting
-- Follow status tracking with profile display
-- Redis-backed for fast lookups
-
-### User Profiles
-- User profile pages with avatar, name, and registration date
-- Display of total likes received and follower/followee counts
-- Follow button with status indicator
-
-### Private Messaging
-- Send private messages between users
-- Conversation-based message organization
-- Unread message tracking and counters
-- Dedicated messaging interface
-
-### Notifications
-- Comment notifications when someone comments on your post
-- Like notifications when someone likes your content
-- Follow notifications when someone follows you
-- Unread notification badges in header
-- Event-driven architecture using QStash for async processing
-
-### Authentication
-- Google OAuth login/signup via NextAuth.js
-- Automatic user profile creation on first login
-- Secure token-based session management
+- **Discussion Posts** - Users can create and browse discussion posts with pagination.
+- **Comments and Replies** - Users can comment on posts and reply to other comments.
+- **Like System** - Users can like posts and comments, with counts stored in Redis.
+- **Follow System** - Users can follow other users and see follower/followee counts on profiles.
+- **Private Messaging** - Users can send direct messages to each other with conversation threads.
+- **Notifications** - Users receive notifications for comments, likes, and follows via an event-driven system.
+- **Authentication** - Google OAuth login via NextAuth.js.
 
 ## Technology Stack
 
-### Frontend
-- **Next.js 16** - React framework with App Router
-- **React 19** - UI component library
-- **CSS Modules** - Component-scoped styling
-- **Tailwind CSS 4** - Utility-first CSS framework
+**Frontend**
 
-### Backend
-- **Next.js API Routes** - Serverless backend implementation
-- **NextAuth.js v5** - Authentication and session management
+- Next.js 16 with App Router
+- React 19
+- CSS Modules
 
-### Database and Storage
-- **Supabase** - PostgreSQL database with real-time capabilities
-- **Upstash Redis** - In-memory data store for caching and counters
-- **Vercel KV** - Key-value store integration
+**Backend**
 
-### Event Processing
-- **Upstash QStash** - Message queue for asynchronous event processing
-- **Webhooks** - Event-driven architecture for notifications
+- Next.js API Routes
+- NextAuth.js v5
 
-## Architecture
+**Database and Storage**
 
-### Event-Driven Design
-The application uses an event-driven architecture for handling user interactions:
+- Supabase (PostgreSQL)
+- Upstash Redis
 
-1. User actions (comments, likes, follows) trigger events
-2. Events are published to QStash message queue (production) or processed directly (development)
-3. Webhooks receive and process events asynchronously
-4. System messages are created for user notifications
+**Event Processing**
 
-### Redis Caching Strategy
-```
-like:entity:{TYPE}:{ID}     - Set of user IDs who liked an entity
-like:user:{ID}              - Counter for total likes received by user
-like:followee:{ID}:{TYPE}   - Set of users following this user
-like:follower:{TYPE}:{ID}   - Set of followers for a user
-```
-
-### Entity Type System
-```javascript
-EntityType = {
-  POST: 1,      // Discussion posts
-  COMMENT: 2,   // Comments and replies
-  USER: 3       // User entities for follow
-}
-```
+- Upstash QStash for async event handling
 
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18.x or higher
-- npm or yarn
 - Supabase account
 - Upstash account (for Redis and QStash)
 - Google Cloud Console project (for OAuth)
@@ -121,19 +48,22 @@ EntityType = {
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/cortalo/MyCommunityBoard.git
 cd MyCommunityBoard
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
-3. Set up environment variables (see [Environment Variables](#environment-variables))
+3. Set up environment variables (see below)
 
 4. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -141,6 +71,7 @@ npm run dev
 5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Available Scripts
+
 ```bash
 npm run dev      # Start development server
 npm run build    # Create production build
@@ -150,7 +81,7 @@ npm run lint     # Run ESLint
 
 ## Environment Variables
 
-Create a `.env.local` file in the root directory with the following variables:
+Create a `.env.local` file in the root directory:
 
 ```env
 # Supabase
@@ -181,89 +112,33 @@ NODE_ENV=development
 ```
 MyCommunityBoard/
 ├── app/
-│   ├── _components/          # Reusable React components
-│   │   ├── Header.js         # Navigation header
-│   │   ├── Homepage.js       # Posts listing layout
-│   │   ├── PostItem.js       # Post list item
-│   │   ├── PostContent.js    # Post detail content
-│   │   ├── PostReplys.js     # Comments container
-│   │   ├── LikeButton.js     # Like toggle (client)
-│   │   ├── FollowButton.js   # Follow toggle (client)
-│   │   ├── PublishPost.js    # Create post modal
-│   │   ├── PublishComment.js # Comment form
-│   │   └── Pagination.js     # Pagination component
+│   ├── _components/          # React components
 │   ├── _lib/                 # Server-side utilities
-│   │   ├── auth.js           # NextAuth configuration
-│   │   ├── supabase.js       # Supabase client
-│   │   ├── DiscussPostMapper.js  # Post CRUD
-│   │   ├── CommentMapper.js  # Comment CRUD
-│   │   ├── UserMapper.js     # User queries
-│   │   └── MessageMapper.js  # Message operations
 │   ├── api/                  # API routes
-│   │   ├── auth/             # NextAuth handlers
-│   │   ├── like/             # Like endpoint
-│   │   └── webhook/          # QStash webhooks
 │   ├── index/                # Posts listing pages
 │   ├── discuss/              # Post detail pages
 │   ├── profile/              # User profile pages
 │   ├── letter/               # Private messaging
 │   └── notice/               # Notifications page
 ├── lib/                      # Shared utilities
-│   ├── redis.js              # Redis client
-│   ├── qstash.js             # QStash client
-│   ├── likeService.js        # Like business logic
-│   ├── followService.js      # Follow business logic
-│   └── eventProducer.js      # Event publishing
 └── public/                   # Static assets
 ```
 
-## API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/[...nextauth]` | GET/POST | Authentication routes |
-| `/api/like` | POST | Toggle like on entity |
-| `/api/webhook/like` | POST | Process like events |
-| `/api/webhook/comment` | POST | Process comment events |
-| `/api/webhook/follow` | POST | Process follow events |
-
 ## Database Schema
 
-### Tables
-
-**users**
-- User profiles synchronized from OAuth provider
-- Fields: id, email, name, image, createdAt
-
-**DiscussPost**
-- Forum discussion posts
-- Fields: id, title, content, userId, createdAt, commentCount, likeCount
-
-**Comment**
-- Comments and replies with entity typing
-- Fields: id, content, userId, entityType, entityId, createdAt
-
-**Message**
-- Private messages between users
-- Fields: id, content, senderId, receiverId, conversationId, isRead, createdAt
+- **users** - User profiles (id, email, name, image, createdAt)
+- **DiscussPost** - Forum posts (id, title, content, userId, createdAt, commentCount, likeCount)
+- **Comment** - Comments and replies (id, content, userId, entityType, entityId, createdAt)
+- **Message** - Private messages (id, content, senderId, receiverId, conversationId, isRead, createdAt)
 
 ## Deployment
 
-This application is optimized for deployment on Vercel:
+Deployed on Vercel. To deploy your own instance:
 
 1. Connect your GitHub repository to Vercel
 2. Configure environment variables in the Vercel dashboard
 3. Deploy
 
-The serverless architecture ensures automatic scaling with:
-- Supabase for managed PostgreSQL
-- Upstash for serverless Redis and message queue
-- Vercel for edge-optimized hosting
-
 ## License
 
-This project is open source and available under the MIT License.
-
-## Author
-
-Developed as a portfolio project demonstrating full-stack web development with modern technologies.
+MIT License
